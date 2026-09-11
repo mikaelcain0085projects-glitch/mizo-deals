@@ -24,3 +24,216 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+/* Cyberpunk transition */
+
+@keyframes cyber-glitch {
+  0% {
+    transform: translateX(0);
+    filter: none;
+    opacity: 0;
+  }
+
+  15% {
+    transform: translateX(-8px);
+    filter: saturate(2) contrast(1.4);
+    opacity: 1;
+  }
+
+  30% {
+    transform: translateX(7px) skewX(2deg);
+    filter: hue-rotate(45deg) saturate(2.5);
+  }
+
+  45% {
+    transform: translateX(-4px) skewX(-3deg);
+    filter: hue-rotate(-30deg) contrast(1.8);
+  }
+
+  65% {
+    transform: translateX(5px);
+    filter: saturate(2);
+  }
+
+  80% {
+    transform: translateX(-2px);
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+}
+
+.animate-cyber-glitch {
+  animation: cyber-glitch 650ms steps(6, end) forwards;
+}
+
+
+@keyframes scanlines {
+  0% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0.8;
+  }
+
+  50% {
+    transform: translateY(20px);
+  }
+
+  80% {
+    opacity: 0.7;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+}
+
+.animate-scanlines {
+  animation: scanlines 650ms linear forwards;
+}
+
+
+@keyframes glitch-bar {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+
+  25% {
+    transform: translateX(10%);
+    opacity: 1;
+  }
+
+  55% {
+    transform: translateX(-5%);
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: translateX(110%);
+    opacity: 0;
+  }
+}
+
+.animate-glitch-bar {
+  animation: glitch-bar 550ms steps(5, end) forwards;
+}
+
+
+@keyframes glitch-bar-2 {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  50% {
+    transform: translateX(-15%);
+    opacity: 0.7;
+  }
+
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.animate-glitch-bar-2 {
+  animation: glitch-bar-2 600ms steps(6, end) forwards;
+}
+
+
+@keyframes glitch-bar-3 {
+  0% {
+    transform: translateX(-80%);
+    opacity: 0;
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  60% {
+    transform: translateX(20%);
+  }
+
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.animate-glitch-bar-3 {
+  animation: glitch-bar-3 500ms steps(5, end) forwards;
+}
+
+
+@keyframes digital-noise {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+
+  20% {
+    transform: translate(-12px, 5px);
+    opacity: 1;
+  }
+
+  40% {
+    transform: translate(15px, -8px);
+  }
+
+  60% {
+    transform: translate(-8px, 10px);
+  }
+
+  80% {
+    transform: translate(10px, -4px);
+    opacity: 0.7;
+  }
+
+  100% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+}
+
+.animate-digital-noise {
+  animation: digital-noise 600ms steps(7, end) forwards;
+}
+
+
+@keyframes cyber-flash {
+  0% {
+    opacity: 0;
+  }
+
+  45% {
+    opacity: 0.12;
+  }
+
+  55% {
+    opacity: 0.75;
+  }
+
+  65% {
+    opacity: 0.08;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+.animate-cyber-flash {
+  animation: cyber-flash 600ms steps(5, end) forwards;
+}
