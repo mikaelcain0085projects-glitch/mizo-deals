@@ -237,3 +237,29 @@ body {
 .animate-cyber-flash {
   animation: cyber-flash 600ms steps(5, end) forwards;
 }
+@keyframes mizo-float {
+  0%,
+  100% {
+    transform: translate3d(0, 20px, 0);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0.12;
+  }
+
+  50% {
+    transform: translate3d(12px, -30px, 0);
+    opacity: 0.18;
+  }
+
+  80% {
+    opacity: 0.08;
+  }
+}
+
+.animate-mizo-float {
+  animation-name: mizo-float;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}

@@ -4,63 +4,196 @@ import Link from "next/link";
 
 export default function Navbar() {
   return (
-    <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-black/70 text-white backdrop-blur-xl">
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
+    <header className="fixed left-0 right-0 top-4 z-50 px-4 md:px-6">
+      <div
+        className="
+          mx-auto
+          flex
+          h-16
+          max-w-7xl
+          items-center
+          justify-between
+          rounded-full
+          border
+          border-white/15
+          bg-white/[0.015]
+          px-5
+          text-white
+          shadow-[0_8px_40px_rgba(0,0,0,0.35)]
+         backdrop-blur-lg
+          transition-all
+          duration-500
+          hover:border-white/25
+          hover:bg-white/[0.075]
+          hover:shadow-[0_12px_50px_rgba(0,0,0,0.45)]
+          md:px-7
+        "
+      >
 
-        {/* LOGO */}
+        {/* =====================================================
+            GLASS REFLECTION
+            ===================================================== */}
+        <div
+          className="
+            pointer-events-none
+            absolute
+            inset-x-10
+            top-0
+            h-px
+            bg-gradient-to-r
+            from-transparent
+            via-white/50
+            to-transparent
+          "
+        />
+
+        {/* =====================================================
+            LOGO
+            ===================================================== */}
         <Link
           href="/"
-          className="text-xl font-medium tracking-[0.25em]"
+          className="
+            relative
+            z-10
+            text-sm
+            font-medium
+            tracking-[0.28em]
+            text-white
+            transition-all
+            duration-300
+            hover:tracking-[0.34em]
+            md:text-base
+          "
         >
           MIZO DEALS
         </Link>
 
-        {/* NAVIGATION */}
-        <nav className="hidden items-center gap-8 md:flex">
+        {/* =====================================================
+            DESKTOP NAVIGATION
+            ===================================================== */}
+        <nav className="relative z-10 hidden items-center gap-1 md:flex">
+
           <Link
             href="/shop"
-            className="text-sm tracking-widest text-white/50 transition hover:text-white"
+            className="
+              rounded-full
+              px-4
+              py-2
+              text-xs
+              font-medium
+              tracking-[0.18em]
+              text-white/50
+              transition-all
+              duration-300
+              hover:bg-white/10
+              hover:text-white
+            "
           >
             SHOP
           </Link>
 
           <Link
             href="/shop?category=men"
-            className="text-sm tracking-widest text-white/50 transition hover:text-white"
+            className="
+              rounded-full
+              px-4
+              py-2
+              text-xs
+              font-medium
+              tracking-[0.18em]
+              text-white/50
+              transition-all
+              duration-300
+              hover:bg-white/10
+              hover:text-white
+            "
           >
             MEN
           </Link>
 
           <Link
             href="/shop?category=women"
-            className="text-sm tracking-widest text-white/50 transition hover:text-white"
+            className="
+              rounded-full
+              px-4
+              py-2
+              text-xs
+              font-medium
+              tracking-[0.18em]
+              text-white/50
+              transition-all
+              duration-300
+              hover:bg-white/10
+              hover:text-white
+            "
           >
             WOMEN
           </Link>
 
           <Link
             href="/shop?category=kids"
-            className="text-sm tracking-widest text-white/50 transition hover:text-white"
+            className="
+              rounded-full
+              px-4
+              py-2
+              text-xs
+              font-medium
+              tracking-[0.18em]
+              text-white/50
+              transition-all
+              duration-300
+              hover:bg-white/10
+              hover:text-white
+            "
           >
             KIDS
           </Link>
 
           <Link
             href="/shop?category=accessories"
-            className="text-sm tracking-widest text-white/50 transition hover:text-white"
+            className="
+              rounded-full
+              px-4
+              py-2
+              text-xs
+              font-medium
+              tracking-[0.18em]
+              text-white/50
+              transition-all
+              duration-300
+              hover:bg-white/10
+              hover:text-white
+            "
           >
             ACCESSORIES
           </Link>
+
         </nav>
 
-        {/* ACTIONS */}
-        <div className="flex items-center gap-5">
+        {/* =====================================================
+            ACTIONS
+            ===================================================== */}
+        <div className="relative z-10 flex items-center gap-2">
 
           {/* WISHLIST */}
           <Link
             href="/wishlist"
             aria-label="Wishlist"
-            className="text-xl transition hover:scale-110"
+            className="
+              flex
+              h-9
+              w-9
+              items-center
+              justify-center
+              rounded-full
+              text-lg
+              text-white/70
+              transition-all
+              duration-300
+              hover:bg-white/10
+              hover:text-white
+              hover:scale-105
+            "
           >
             ♡
           </Link>
@@ -69,7 +202,21 @@ export default function Navbar() {
           <Link
             href="/cart"
             aria-label="Shopping cart"
-            className="text-xl transition hover:scale-110"
+            className="
+              flex
+              h-9
+              w-9
+              items-center
+              justify-center
+              rounded-full
+              text-base
+              text-white/70
+              transition-all
+              duration-300
+              hover:bg-white/10
+              hover:text-white
+              hover:scale-105
+            "
           >
             🛒
           </Link>
@@ -78,18 +225,52 @@ export default function Navbar() {
           <Link
             href="/account"
             aria-label="Account"
-             className="text-orange-500 transition hover:text-white"
+            className="
+              hidden
+              rounded-full
+              px-4
+              py-2
+              text-xs
+              font-semibold
+              tracking-[0.12em]
+              text-white/70
+              transition-all
+              duration-300
+              hover:bg-white
+              hover:text-black
+              sm:block
+            "
           >
             ACCOUNT
           </Link>
+
+          {/* ADMIN */}
           <Link
-  href="/admin/login"
- className="hidden text-sm tracking-widest text-white/80 transition hover:text-white sm:block"
->
-  ADMIN
-</Link>
+            href="/admin/login"
+            className="
+              hidden
+              rounded-full
+              border
+              border-white/10
+              px-4
+              py-2
+              text-xs
+              font-medium
+              tracking-[0.15em]
+              text-white/45
+              transition-all
+              duration-300
+              hover:border-white/25
+              hover:bg-white/10
+              hover:text-white
+              sm:block
+            "
+          >
+            ADMIN
+          </Link>
 
         </div>
+
       </div>
     </header>
   );

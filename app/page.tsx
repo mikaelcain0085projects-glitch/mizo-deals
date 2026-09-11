@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import LandingHero from "../components/LandingHero";
 import Navbar from "../components/Navbar";
+import FloatingParticles from "@/components/FloatingParticles";
 
 const categories = [
   {
@@ -33,6 +34,7 @@ const categories = [
 export default function Home() {
   return (
     <main className="bg-black text-white">
+      <FloatingParticles />
       <Navbar />
 
       {/* =====================================================
@@ -43,8 +45,22 @@ export default function Home() {
       {/* =====================================================
           SECOND SECTION — SHOP THE COLLECTION
           ===================================================== */}
-      <section className="min-h-screen bg-[#111111] px-6 py-24 md:px-12 lg:px-20">
+     <section className="relative min-h-screen overflow-hidden bg-[#111111] px-6 py-24 md:px-12 lg:px-20">
+      {/* SOFT SECTION TRANSITION */}
+<div
+  aria-hidden="true"
+  className="
+    pointer-events-none
+    absolute inset-x-0 top-0
+    h-32
+    bg-gradient-to-b
+    from-black
+    via-black/40
+    to-transparent
+  "
+/>
         <div className="mx-auto max-w-7xl">
+          
 
           {/* SECTION HEADING */}
           <div className="mb-16 max-w-3xl">
@@ -62,7 +78,7 @@ export default function Home() {
             </p>
           </div>
 
-          {/* =================================================
+                   {/* =================================================
               LIQUID GLASS CATEGORY GRID
               ================================================= */}
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
@@ -89,29 +105,23 @@ export default function Home() {
                 "
               >
 
-                {/* =================================================
-                    CATEGORY IMAGE
-                    ================================================= */}
                 <Image
-  src={category.image}
-  alt={`${category.name} collection`}
-  fill
-  sizes="(max-width: 768px) 100vw, 50vw"
-  loading="lazy"
-  unoptimized
-  className="
-    object-cover
-    grayscale
-    transition-transform
-    duration-700
-    ease-out
-    group-hover:scale-105
-  "
-/>
+                  src={category.image}
+                  alt={`${category.name} collection`}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  loading="lazy"
+                  className="
+                    object-cover
+                    grayscale
+                    transition-transform
+                    duration-700
+                    ease-out
+                    group-hover:scale-105
+                  "
+                />
 
-                {/* =================================================
-                    DARK CINEMATIC GRADIENT
-                    ================================================= */}
+                {/* DARK CINEMATIC GRADIENT */}
                 <div
                   className="
                     absolute
@@ -128,9 +138,7 @@ export default function Home() {
                   "
                 />
 
-                {/* =================================================
-                    LIQUID GLASS PANEL
-                    ================================================= */}
+                {/* LIQUID GLASS PANEL */}
                 <div
                   className="
                     absolute
@@ -140,14 +148,12 @@ export default function Home() {
                     backdrop-blur-[1px]
                     transition-all
                     duration-500
-                    group-hover:bg-[#f2f0eb]/[0.12]
-                    group-hover:backdrop-blur-[2px]                 
-                    "
+                    group-hover:bg-white/[0.12]
+                    group-hover:backdrop-blur-[2px]
+                  "
                 />
 
-                {/* =================================================
-                    GLASS HIGHLIGHT
-                    ================================================= */}
+                {/* GLASS HIGHLIGHT */}
                 <div
                   className="
                     pointer-events-none
@@ -167,9 +173,7 @@ export default function Home() {
                   "
                 />
 
-                {/* =================================================
-                    GLASS EDGE LIGHT
-                    ================================================= */}
+                {/* GLASS EDGE */}
                 <div
                   className="
                     pointer-events-none
@@ -181,104 +185,33 @@ export default function Home() {
                     shadow-[inset_0_1px_0_rgba(255,255,255,0.25),inset_0_-1px_0_rgba(255,255,255,0.05)]
                     transition-all
                     duration-500
-                    group-hover:border-[#f2f0eb]/50
+                    group-hover:border-white/50
                     group-hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.65),inset_0_-1px_0_rgba(255,255,255,0.15)]
                   "
                 />
 
-                {/* =================================================
-                    CONTENT
-                    ================================================= */}
+                {/* CONTENT */}
                 <div className="relative z-10 flex h-full min-h-[300px] flex-col justify-between p-8 md:min-h-[360px] md:p-10">
 
-                  {/* TOP */}
                   <div>
-                    <p
-                      className="
-                        text-xs
-                        tracking-[0.35em]
-                        text-white/50
-                        transition-colors
-                        duration-500
-                        group-hover:text-white/70
-                      "
-                    >
+                    <p className="text-xs tracking-[0.35em] text-white/50 transition-colors duration-500 group-hover:text-white/70">
                       COLLECTION
                     </p>
 
-                    <h3
-                      className="
-                        mt-5
-                        text-3xl
-                        font-medium
-                        tracking-[0.12em]
-                        text-white
-                        drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]
-                        transition-transform
-                        duration-500
-                        group-hover:translate-x-1
-                        md:text-4xl
-                      "
-                    >
+                    <h3 className="mt-5 text-3xl font-medium tracking-[0.12em] text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] transition-transform duration-500 group-hover:translate-x-1 md:text-4xl">
                       {category.name}
                     </h3>
 
-                    {/* SMALL GLASS LINE */}
-                    <div
-                      className="
-                        mt-6
-                        h-px
-                        w-12
-                        bg-white/70
-                        transition-all
-                        duration-500
-                        group-hover:w-20
-                        group-hover:bg-[#f2f0eb]
-                      "
-                    />
+                    <div className="mt-6 h-px w-12 bg-white/70 transition-all duration-500 group-hover:w-20" />
                   </div>
 
-                  {/* BOTTOM */}
                   <div className="flex items-end justify-between">
 
-                    <p
-                      className="
-                        max-w-[230px]
-                        text-sm
-                        leading-6
-                        text-white/65
-                        drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]
-                        transition-colors
-                        duration-500
-                        group-hover:text-white/85
-                      "
-                    >
+                    <p className="max-w-[230px] text-sm leading-6 text-white/65 drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)] transition-colors duration-500 group-hover:text-white/85">
                       {category.description}
                     </p>
 
-                    {/* CIRCULAR ARROW */}
-                    <div
-                      className="
-                        flex
-                        h-12
-                        w-12
-                        shrink-0
-                        items-center
-                        justify-center
-                        rounded-full
-                        border
-                        border-white/60
-                        bg-white/[0.06]
-                        text-xl
-                        backdrop-blur-xl
-                        transition-all
-                        duration-500
-                        group-hover:border-[#f2f0eb]
-                        group-hover:bg-[#f2f0eb]/20
-                        group-hover:translate-x-1
-                        group-hover:scale-105
-                      "
-                    >
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-white/60 bg-white/[0.06] text-xl backdrop-blur-xl transition-all duration-500 group-hover:border-white group-hover:bg-white/20 group-hover:translate-x-1 group-hover:scale-105">
                       →
                     </div>
 
@@ -290,9 +223,350 @@ export default function Home() {
             ))}
 
           </div>
+        </div>
+      </section>
+
+      {/* =====================================================
+          THIRD SECTION — OUR STORY
+          ===================================================== */}
+      <section className="relative min-h-screen overflow-hidden bg-black text-white">
+
+        {/* STORE INTERIOR IMAGE */}
+        <Image
+          src="/media/mizo-deals-interior.png"
+          alt="Inside the MIZO DEALS store"
+          fill
+          sizes="100vw"
+          className="object-cover brightness-110"
+        />
+
+        {/* LIGHT CINEMATIC OVERLAY */}
+        <div className="absolute inset-0 bg-black/25" />
+
+        <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/5 to-transparent" />
+
+        {/* CONTENT */}
+        <div className="relative z-10 flex min-h-screen items-center px-6 py-24 md:px-12 lg:px-20">
+
+          <div className="max-w-4xl">
+
+            <p className="text-xs font-semibold uppercase tracking-[0.4em] text-white/60">
+              MIZO DEALS / OUR STORY
+            </p>
+
+            <h2 className="mt-8 max-w-4xl text-6xl font-semibold leading-[0.9] tracking-[-0.04em] md:text-8xl">
+              WEAR A
+              <br />
+              BETTER YOU.
+            </h2>
+
+            <p className="mt-8 max-w-3xl text-base leading-7 text-white/75 md:text-lg">
+              More than a clothing store. MIZO DEALS is a place where
+              personal style meets Mizo identity, modern design, and the
+              simple confidence of wearing something that feels like you.
+            </p>
+
+            <div className="mt-10 flex flex-wrap gap-4">
+
+              <Link
+                href="/shop"
+                className="rounded-full bg-white px-8 py-4 text-xs font-semibold uppercase tracking-[0.2em] text-black transition-all duration-300 hover:-translate-y-1 hover:bg-white/90"
+              >
+                EXPLORE COLLECTION
+              </Link>
+
+              <Link
+                href="/orders"
+                className="rounded-full border border-white/30 bg-black/30 px-8 py-4 text-xs 
+                font-semibold uppercase tracking-[0.2em] text-white backdrop-blur-md 
+                transition-all duration-300 hover:-translate-y-1 hover:border-white/60 
+                hover:bg-white/10"
+              >
+                <span>TRACK YOUR ORDER</span>
+
+<span
+  className="
+    ml-3 inline-block
+    transition-transform duration-300
+    group-hover:translate-x-1
+  "
+>
+  →
+</span>
+              </Link>
+
+            </div>
+
+          </div>
+
+        </div>
+            </section>
+
+      {/* =====================================================
+          FOURTH SECTION — STYLE WITH SOMETHING TO SAY
+          ===================================================== */}
+      <section className="relative overflow-hidden bg-[#111111] px-6 py-28 md:px-12 lg:px-20">
+        <div className="mx-auto grid max-w-7xl gap-16 lg:grid-cols-[1fr_1.2fr] lg:items-center">
+
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-white/35">
+              WHY MIZO DEALS
+            </p>
+
+            <h2 className="mt-6 text-5xl font-semibold leading-[0.95] tracking-[-0.04em] md:text-7xl">
+              STYLE WITH
+              <br />
+              SOMETHING TO
+              <br />
+              SAY.
+            </h2>
+          </div>
+
+          <div className="max-w-2xl">
+            <p className="text-lg leading-8 text-white/65 md:text-xl">
+              Fashion should feel personal. It should give you confidence,
+              reflect your personality, and fit naturally into your everyday
+              life.
+            </p>
+
+            <p className="mt-7 text-base leading-7 text-white/45 md:text-lg">
+              That is the idea behind MIZO DEALS. We are building a modern
+              fashion destination where clothing, culture, people, and
+              creativity come together.
+            </p>
+          </div>
 
         </div>
       </section>
+
+      {/* =====================================================
+          FIFTH SECTION — BUILT AROUND THE DETAILS
+          ===================================================== */}
+      <section className="bg-black px-6 py-28 text-white md:px-12 lg:px-20">
+
+        <div className="mx-auto max-w-7xl">
+
+          <div className="mb-16 max-w-2xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-white/35">
+              WHAT WE STAND FOR
+            </p>
+
+            <h2 className="mt-6 text-5xl font-semibold leading-[0.95] tracking-[-0.04em] md:text-7xl">
+              BUILT AROUND
+              <br />
+              THE DETAILS.
+            </h2>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-2">
+
+            {[
+              {
+                number: "01",
+                title: "Mizo Identity",
+                text: "A modern fashion space shaped by where we come from and how we choose to move forward.",
+              },
+              {
+                number: "02",
+                title: "Curated Style",
+                text: "Thoughtfully selected clothing and accessories designed to make everyday dressing feel effortless.",
+              },
+              {
+                number: "03",
+                title: "Quality First",
+                text: "We believe good style starts with pieces you actually enjoy wearing, season after season.",
+              },
+              {
+                number: "04",
+                title: "People Matter",
+                text: "Behind every order is a person. We are here to make the shopping experience feel personal.",
+              },
+            ].map((value) => (
+
+              <div
+                key={value.number}
+                className="
+                  group
+                  relative
+                  overflow-hidden
+                  rounded-[28px]
+                  border
+                  border-white/10
+                  bg-white/[0.045]
+                  p-8
+                  backdrop-blur-xl
+                  transition-all
+                  duration-500
+                  hover:-translate-y-1
+                  hover:border-white/25
+                  hover:bg-white/[0.07]
+                  md:p-10
+                "
+              >
+
+                {/* GLASS HIGHLIGHT */}
+                <div
+                  className="
+                    pointer-events-none
+                    absolute
+                    -right-20
+                    -top-24
+                    h-48
+                    w-48
+                    rounded-full
+                    bg-white/[0.07]
+                    blur-3xl
+                    transition-transform
+                    duration-700
+                    group-hover:translate-x-8
+                    group-hover:translate-y-8
+                  "
+                />
+
+                <div className="relative z-10">
+
+                  <p className="text-xs tracking-[0.25em] text-white/25">
+                    {value.number}
+                  </p>
+
+                  <h3 className="mt-12 text-2xl font-medium tracking-tight">
+                    {value.title}
+                  </h3>
+
+                  <p className="mt-5 max-w-xl text-sm leading-7 text-white/50 md:text-base">
+                    {value.text}
+                  </p>
+
+                </div>
+
+              </div>
+
+            ))}
+
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* =====================================================
+          SIXTH SECTION — BRAND STATEMENT
+          ===================================================== */}
+      <section className="relative overflow-hidden border-y border-white/10 bg-[#0d0d0d] px-6 py-32 md:px-12 lg:px-20">
+
+        <div className="mx-auto max-w-5xl text-center">
+
+          <p className="text-xs font-semibold uppercase tracking-[0.4em] text-white/30">
+            MIZO DEALS
+          </p>
+
+          <blockquote className="mt-8 text-4xl font-medium leading-[1.05] tracking-[-0.04em] md:text-6xl lg:text-7xl">
+            “Good outfits brighten days.
+            <br />
+            Great style becomes part of your story.”
+          </blockquote>
+
+          <div className="mx-auto mt-10 h-px w-12 bg-white/30" />
+
+          <p className="mt-7 text-xs uppercase tracking-[0.3em] text-white/40">
+            Clothes · People · Stories
+          </p>
+
+        </div>
+
+      </section>
+
+      {/* =====================================================
+          SEVENTH SECTION — TRACK YOUR ORDER
+          ===================================================== */}
+      <section className="relative overflow-hidden bg-[#111111] px-6 py-28 md:px-12 lg:px-20">
+
+        <div
+          className="
+            mx-auto
+            max-w-7xl
+            overflow-hidden
+            rounded-[32px]
+            border
+            border-white/15
+            bg-white/[0.045]
+            p-8
+            backdrop-blur-xl
+            md:p-12
+            lg:p-16
+          "
+        >
+
+          <div className="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
+
+            <div className="max-w-2xl">
+
+              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-white/35">
+                YOUR ORDER
+              </p>
+
+              <h2 className="mt-6 text-5xl font-semibold leading-[0.95] tracking-[-0.04em] md:text-6xl">
+                WHERE'S YOUR
+                <br />
+                ORDER NOW?
+              </h2>
+
+              <p className="mt-6 max-w-xl text-sm leading-7 text-white/50 md:text-base">
+                Check your orders and keep an eye on your latest MIZO DEALS
+                purchase.
+              </p>
+
+            </div>
+
+            <Link
+              href="/orders"
+              className="
+  group relative inline-flex items-center justify-center
+  overflow-hidden rounded-full
+  border border-white/20
+  bg-white px-7 py-3
+  text-sm font-semibold tracking-[0.12em] text-black
+  transition-all duration-300
+  hover:-translate-y-1
+  hover:bg-white/90
+  hover:shadow-[0_10px_35px_rgba(255,255,255,0.18)]
+  active:translate-y-0
+"
+            >
+             <span>TRACK YOUR ORDER</span>
+
+<span
+  className="
+    ml-3 inline-block
+    transition-transform duration-300
+    group-hover:translate-x-1
+  "
+>
+  →
+</span>
+            </Link>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* =====================================================
+          FOOTER
+          ===================================================== */}
+      <footer className="border-t border-white/10 bg-black px-6 py-12">
+
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 text-xs uppercase tracking-[0.25em] text-white/30 md:flex-row md:items-center md:justify-between">
+
+          <span>MIZO DEALS</span>
+
+          <span>WEAR A BETTER YOU</span>
+
+        </div>
+
+      </footer>
+
     </main>
   );
 }
