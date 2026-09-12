@@ -273,20 +273,21 @@ export default async function ShopPage({
   </div>
 </div>
         {/* CATEGORY NAVIGATION */}
-<div className="mb-14 border-y border-white/10 py-5">
-  <div className="flex flex-wrap items-center gap-2">
-    <span className="mr-3 text-[10px] font-semibold uppercase tracking-[0.25em] text-white/25">
-      Browse
-    </span>
+<div className="mb-14 border-y border-white/10 py-6">
+  <div className="flex flex-wrap items-center gap-2.5">
+  
+    <span className="mr-3 text-[10px] font-semibold uppercase tracking-[0.3em] text-white/25">
+  Browse
+</span>
 
     {/* ALL */}
     <Link
       href="/shop"
-      className={`rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.12em] transition-all duration-300 ${
-        !selectedCategory
-          ? "bg-white text-black shadow-lg shadow-white/5"
-          : "text-white/45 hover:bg-white/10 hover:text-white"
-      }`}
+      className={`rounded-full border px-5 py-2.5 text-[11px] font-semibold uppercase tracking-[0.14em] transition-all duration-300 ${
+  !selectedCategory
+    ? "border-white bg-white text-black shadow-[0_6px_25px_rgba(255,255,255,0.08)]"
+    : "border-white/10 bg-white/[0.025] text-white/45 hover:border-white/25 hover:bg-white/[0.07] hover:text-white"
+}`}
     >
       All
     </Link>
@@ -343,36 +344,79 @@ export default async function ShopPage({
         {/* SUBCATEGORY NAVIGATION */}
         {currentSubcategories.length > 0 && (
           <div className="mb-12">
+  <div className="mb-4 flex items-center gap-3">
+    <span className="h-px w-6 bg-white/20" />
+
+    <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-white/30">
+      {currentParentCategory?.name} Categories
+    </p>
+  </div>
             <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-white/30">
               {currentParentCategory?.name} Categories
             </p>
 
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2.5">
               <Link
                 href={`/shop?category=${currentParentCategory?.slug}`}
-                className="rounded-full border border-white/15 px-5 py-2.5 text-xs font-semibold tracking-[0.12em] text-white/60 transition hover:border-white/40 hover:text-white"
+                className="
+  rounded-full
+  border border-white/10
+  bg-white/[0.025]
+  px-5 py-2.5
+  text-[10px]
+  font-semibold
+  uppercase
+  tracking-[0.16em]
+  text-white/45
+  backdrop-blur-md
+  transition-all
+  duration-300
+  hover:-translate-y-0.5
+  hover:border-white/30
+  hover:bg-white/[0.08]
+  hover:text-white
+  hover:shadow-[0_6px_25px_rgba(255,255,255,0.04)]
+"
               >
                 All {currentParentCategory?.name}
               </Link>
 
               {currentSubcategories.map(
-                (subcategory) => (
-                  <Link
-                    key={subcategory.id}
-                    href={`/shop?category=${subcategory.slug}`}
-                    className="rounded-full border border-white/15 px-5 py-2.5 text-xs font-semibold tracking-[0.12em] text-white/60 transition hover:border-white/40 hover:bg-white hover:text-black"
-                  >
-                    {subcategory.name}
-                  </Link>
-                )
-              )}
+  (subcategory) => (
+    <Link
+      key={subcategory.id}
+      href={`/shop?category=${subcategory.slug}`}
+      className="
+        rounded-full
+        border border-white/10
+        bg-white/[0.025]
+        px-5 py-2.5
+        text-[10px]
+        font-semibold
+        uppercase
+        tracking-[0.16em]
+        text-white/45
+        backdrop-blur-md
+        transition-all
+        duration-300
+        hover:-translate-y-0.5
+        hover:border-white/30
+        hover:bg-white/[0.08]
+        hover:text-white
+        hover:shadow-[0_6px_25px_rgba(255,255,255,0.04)]
+      "
+    >
+      {subcategory.name}
+    </Link>
+  )
+)}
             </div>
           </div>
         )}
 
         {/* PRODUCTS */}
         {products && products.length > 0 ? (
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+         <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4">
 
             {products.map((product) => {
 
@@ -433,13 +477,33 @@ export default async function ShopPage({
 
                   {/* PRODUCT IMAGE */}
                   <div className="relative aspect-[4/5] overflow-hidden bg-white/[0.035]">
+  <div
+    aria-hidden="true"
+    className="
+      pointer-events-none
+      absolute inset-0 z-10
+      bg-gradient-to-t
+      from-black/20
+      via-transparent
+      to-white/[0.04]
+      opacity-70
+      transition-opacity duration-500
+      group-hover:opacity-100
+    "
+  />
 
                     {imageUrl ? (
                       <Image
                         src={imageUrl}
                         alt={product.name}
                         fill
-                       className="object-cover transition duration-700 group-hover:scale-[1.04]"
+                      className="
+  object-cover
+  transition-transform
+  duration-700
+  ease-out
+  group-hover:scale-[1.06]
+"
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                       />
                     ) : (
@@ -458,48 +522,81 @@ export default async function ShopPage({
                   </div>
 
                   {/* PRODUCT INFORMATION */}
-                 <div className="relative z-20 border-t border-white/10 bg-black/20 p-5 backdrop-blur-xl">
+                <div
+  className="
+    relative z-20
+    border-t border-white/10
+    bg-black/25
+    p-3.5 sm:p-5
+    backdrop-blur-xl
+    transition-colors duration-500
+    group-hover:bg-black/35
+  "
+>
+  {/* CATEGORY */}
+  <p
+    className="
+      text-[10px]
+      font-semibold
+      uppercase
+      tracking-[0.25em]
+      text-white/35
+      transition-colors
+      duration-300
+      group-hover:text-white/50
+    "
+  >
+    {categoryName}
+  </p>
 
-                    {/* CATEGORY */}
-                    <p className="text-xs uppercase tracking-widest text-white/40">
-                      {categoryName}
-                    </p>
+  {/* PRODUCT NAME */}
+  <h2
+    className="
+      mt-2
+      line-clamp-2
+      text-lg
+      font-medium
+      leading-snug
+      tracking-[-0.01em]
+      text-white
+      transition-transform
+      duration-300
+      group-hover:translate-x-[2px]
+    "
+  >
+    {product.name}
+  </h2>
 
-                    {/* PRODUCT NAME */}
-                    <h2 className="mt-2 text-lg font-medium">
-                      {product.name}
-                    </h2>
+  {/* PRICE */}
+  <div className="mt-4 flex items-baseline gap-3">
+    {hasSale ? (
+      <>
+        <span className="text-base font-semibold tracking-tight text-white">
+          ₹{product.sale_price?.toFixed(2)}
+        </span>
 
-                    {/* PRICE */}
-                    <div className="mt-3 flex items-center gap-3">
+        <span className="text-xs text-white/30 line-through">
+          ₹{product.price.toFixed(2)}
+        </span>
+      </>
+    ) : (
+      <span className="text-base font-semibold tracking-tight text-white">
+        ₹{product.price.toFixed(2)}
+      </span>
+    )}
+  </div>
 
-                      {hasSale ? (
-                        <>
-                          <span className="font-semibold">
-                            ₹{product.sale_price?.toFixed(2)}
-                          </span>
-
-                          <span className="text-sm text-white/40 line-through">
-                            ₹{product.price.toFixed(2)}
-                          </span>
-                        </>
-                      ) : (
-                        <span className="font-semibold">
-                          ₹{product.price.toFixed(2)}
-                        </span>
-                      )}
-
-                    </div>
-
-                    {/* STOCK */}
-                    <p className="mt-2 text-sm text-white/40">
-                      {product.stock > 0
-                        ? `${product.stock} in stock`
-                        : "Out of stock"}
-                    </p>
-
-                  </div>
-
+  {/* STOCK */}
+  <p
+    className={`mt-2 text-[11px] tracking-wide ${
+      product.stock > 0 ? "text-white/30" : "text-white/50"
+    }`}
+  >
+    {product.stock > 0
+      ? `${product.stock} in stock`
+      : "Out of stock"}
+  </p>
+</div>
                 </Link>
               );
             })}
