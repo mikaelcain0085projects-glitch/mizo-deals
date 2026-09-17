@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { addToCart } from "../lib/cart";
+import { createClient } from "../lib/supabase-browser";
 
 type ProductActionsProps = {
   productId: string;
@@ -11,6 +12,7 @@ type ProductActionsProps = {
   sizes: unknown[];
   colors: unknown[];
 };
+
 export default function ProductActions({
   productId,
   productName,
@@ -19,6 +21,7 @@ export default function ProductActions({
   colors,
 }: ProductActionsProps) {
   const router = useRouter();
+  const supabase = createClient();
 
   const [selectedSize, setSelectedSize] = useState<string>(
     sizes.length > 0 ? String(sizes[0]) : ""
@@ -30,10 +33,34 @@ export default function ProductActions({
 
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [wishlistLoading, setWishlistLoading] = useState(false);
+  const [isWishlisted, setIsWishlisted] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  
+  useEffect(() => {
+    async function checkWishlist() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        return;
+      }
+
+      const { data } = await supabase
+        .from("wishlist")
+        .select("id")
+        .eq("user_id", user.id)
+        .eq("product_id", productId)
+        .maybeSingle();
+
+      setIsWishlisted(!!data);
+    }
+
+    checkWishlist();
+  }, [productId, supabase]);
+
   function decreaseQuantity() {
     setQuantity((current) => Math.max(1, current - 1));
   }
@@ -76,6 +103,60 @@ export default function ProductActions({
       setError(errorMessage);
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handleWishlist() {
+    setError("");
+    setMessage("");
+    setWishlistLoading(true);
+
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        router.push("/account/login");
+        return;
+      }
+
+      if (isWishlisted) {
+        const { error: deleteError } = await supabase
+          .from("wishlist")
+          .delete()
+          .eq("user_id", user.id)
+          .eq("product_id", productId);
+
+        if (deleteError) {
+          throw deleteError;
+        }
+
+        setIsWishlisted(false);
+        setMessage(`${productName} removed from your wishlist.`);
+      } else {
+        const { error: insertError } = await supabase
+          .from("wishlist")
+          .insert({
+            user_id: user.id,
+            product_id: productId,
+          });
+
+        if (insertError) {
+          throw insertError;
+        }
+
+        setIsWishlisted(true);
+        setMessage(`${productName} added to your wishlist.`);
+      }
+    } catch (wishlistError) {
+      setError(
+        wishlistError instanceof Error
+          ? wishlistError.message
+          : "Unable to update your wishlist."
+      );
+    } finally {
+      setWishlistLoading(false);
     }
   }
 
@@ -157,9 +238,7 @@ export default function ProductActions({
               −
             </button>
 
-            <span className="min-w-10 text-center">
-              {quantity}
-            </span>
+            <span className="min-w-10 text-center">{quantity}</span>
 
             <button
               type="button"
@@ -180,30 +259,29 @@ export default function ProductActions({
       )}
 
       {message && (
-  <div className="rounded-xl border border-green-400/20 bg-green-400/10 p-4">
-    <p className="text-sm text-green-300">
-      {message}
-    </p>
+        <div className="rounded-xl border border-green-400/20 bg-green-400/10 p-4">
+          <p className="text-sm text-green-300">{message}</p>
 
-    <div className="mt-4 flex flex-wrap gap-3">
-      <button
-        type="button"
-        onClick={() => router.push("/cart")}
-        className="rounded-full bg-white px-5 py-2.5 text-xs font-semibold tracking-[0.12em] text-black transition hover:bg-white/90"
-      >
-        VIEW CART →
-      </button>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <button
+              type="button"
+              onClick={() => router.push("/cart")}
+              className="rounded-full bg-white px-5 py-2.5 text-xs font-semibold tracking-[0.12em] text-black transition hover:bg-white/90"
+            >
+              VIEW CART →
+            </button>
 
-      <button
-        type="button"
-        onClick={() => router.push("/shop")}
-        className="rounded-full border border-white/20 px-5 py-2.5 text-xs font-semibold tracking-[0.12em] text-white transition hover:bg-white hover:text-black"
-      >
-        CONTINUE SHOPPING
-      </button>
-    </div>
-  </div>
-)}
+            <button
+              type="button"
+              onClick={() => router.push("/shop")}
+              className="rounded-full border border-white/20 px-5 py-2.5 text-xs font-semibold tracking-[0.12em] text-white transition hover:bg-white hover:text-black"
+            >
+              CONTINUE SHOPPING
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="mt-10 flex flex-col gap-4 sm:flex-row">
         <button
           type="button"
@@ -220,9 +298,19 @@ export default function ProductActions({
 
         <button
           type="button"
-          className="rounded-full border border-white/30 px-8 py-4 text-sm tracking-widest transition hover:border-white"
+          onClick={handleWishlist}
+          disabled={wishlistLoading}
+          className={`rounded-full border px-8 py-4 text-sm tracking-widest transition ${
+            isWishlisted
+              ? "border-white bg-white text-black"
+              : "border-white/30 hover:border-white"
+          }`}
         >
-          ♡ WISHLIST
+          {wishlistLoading
+            ? "SAVING..."
+            : isWishlisted
+              ? "♥ WISHLIST"
+              : "♡ WISHLIST"}
         </button>
       </div>
     </div>

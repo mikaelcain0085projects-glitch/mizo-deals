@@ -239,14 +239,34 @@ export default async function ShopPage({
       : [];
 
   return (
-    <main className="min-h-screen bg-black px-6 py-32 text-white">
-      <div className="mx-auto max-w-7xl">
+    <main className="relative min-h-screen bg-black text-white">
+
+      {/* =====================================================
+          HERO — shop background image + cinematic fade
+          ===================================================== */}
+      <section className="relative overflow-hidden px-6 pt-32">
+
+        {/* SHOP BACKGROUND IMAGE */}
+        <Image
+          src="/media/shop-bg.png"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
+
+        {/* DARK CINEMATIC OVERLAY */}
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/45 to-black" />
+
+        <div className="relative z-10 mx-auto max-w-7xl">
 
        {/* SHOP HEADER */}
 <div className="mb-12">
   <Link
     href="/"
-    className="group inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/40 transition hover:text-white"
+    className="group inline-flex items-center gap-2 text-xl font-normal uppercase tracking-[0.2em] text-orange-500 transition hover:text-orange-300"
   >
     <span className="transition-transform duration-300 group-hover:-translate-x-1">
       ←
@@ -283,10 +303,10 @@ export default async function ShopPage({
     {/* ALL */}
     <Link
       href="/shop"
-      className={`rounded-full border px-5 py-2.5 text-[11px] font-semibold uppercase tracking-[0.14em] transition-all duration-300 ${
+      className={`group relative rounded-full border px-5 py-2.5 text-[11px] font-semibold uppercase tracking-[0.14em] transition-all duration-300 ${
   !selectedCategory
-    ? "border-white bg-white text-black shadow-[0_6px_25px_rgba(255,255,255,0.08)]"
-    : "border-white/10 bg-white/[0.025] text-white/45 hover:border-white/25 hover:bg-white/[0.07] hover:text-white"
+    ? "border-orange-400 bg-orange-500 text-black shadow-[0_6px_25px_rgba(249,115,22,0.25)]"
+    : "shimmer-hover border-white/10 bg-white/[0.025] text-white/45 hover:-translate-y-0.5 hover:border-orange-400/40 hover:bg-white/[0.06] hover:text-white hover:shadow-[0_10px_28px_rgba(249,115,22,0.14)]"
 }`}
     >
       All
@@ -295,10 +315,10 @@ export default async function ShopPage({
     {/* MEN */}
     <Link
       href="/shop?category=men"
-      className={`rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.12em] transition-all duration-300 ${
+      className={`group relative rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.12em] transition-all duration-300 ${
         selectedCategory === "men"
-          ? "bg-white text-black shadow-lg shadow-white/5"
-          : "text-white/45 hover:bg-white/10 hover:text-white"
+          ? "bg-orange-500 text-black shadow-lg shadow-orange-500/25"
+          : "shimmer-hover border border-transparent text-white/45 hover:-translate-y-0.5 hover:border-orange-400/30 hover:bg-white/[0.06] hover:text-white hover:shadow-[0_10px_24px_rgba(249,115,22,0.12)]"
       }`}
     >
       Men
@@ -307,10 +327,10 @@ export default async function ShopPage({
     {/* WOMEN */}
     <Link
       href="/shop?category=women"
-      className={`rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.12em] transition-all duration-300 ${
+      className={`group relative rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.12em] transition-all duration-300 ${
         selectedCategory === "women"
-          ? "bg-white text-black shadow-lg shadow-white/5"
-          : "text-white/45 hover:bg-white/10 hover:text-white"
+          ? "bg-orange-500 text-black shadow-lg shadow-orange-500/25"
+          : "shimmer-hover border border-transparent text-white/45 hover:-translate-y-0.5 hover:border-orange-400/30 hover:bg-white/[0.06] hover:text-white hover:shadow-[0_10px_24px_rgba(249,115,22,0.12)]"
       }`}
     >
       Women
@@ -319,10 +339,10 @@ export default async function ShopPage({
     {/* KIDS */}
     <Link
       href="/shop?category=kids"
-      className={`rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.12em] transition-all duration-300 ${
+      className={`group relative rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.12em] transition-all duration-300 ${
         selectedCategory === "kids"
-          ? "bg-white text-black shadow-lg shadow-white/5"
-          : "text-white/45 hover:bg-white/10 hover:text-white"
+          ? "bg-orange-500 text-black shadow-lg shadow-orange-500/25"
+          : "shimmer-hover border border-transparent text-white/45 hover:-translate-y-0.5 hover:border-orange-400/30 hover:bg-white/[0.06] hover:text-white hover:shadow-[0_10px_24px_rgba(249,115,22,0.12)]"
       }`}
     >
       Kids
@@ -331,16 +351,25 @@ export default async function ShopPage({
     {/* ACCESSORIES */}
     <Link
       href="/shop?category=accessories"
-      className={`rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.12em] transition-all duration-300 ${
+      className={`group relative rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.12em] transition-all duration-300 ${
         selectedCategory === "accessories"
-          ? "bg-white text-black shadow-lg shadow-white/5"
-          : "text-white/45 hover:bg-white/10 hover:text-white"
+          ? "bg-orange-500 text-black shadow-lg shadow-orange-500/25"
+          : "shimmer-hover border border-transparent text-white/45 hover:-translate-y-0.5 hover:border-orange-400/30 hover:bg-white/[0.06] hover:text-white hover:shadow-[0_10px_24px_rgba(249,115,22,0.12)]"
       }`}
     >
       Accessories
     </Link>
   </div>
 </div>
+
+        </div>
+      </section>
+
+      {/* =====================================================
+          REST OF SHOP — plain background, no image
+          ===================================================== */}
+      <div className="mx-auto max-w-7xl px-6 pb-32 pt-14">
+
         {/* SUBCATEGORY NAVIGATION */}
         {currentSubcategories.length > 0 && (
           <div className="mb-12">
