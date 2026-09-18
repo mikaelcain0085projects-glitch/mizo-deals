@@ -287,8 +287,8 @@ export default function Home() {
 <span
   className="
     ml-3 inline-block
-    transition-transform duration-300
-    group-hover:translate-x-1
+    transition-all duration-500 ease-out
+    group-hover:translate-x-1.5
   "
 >
   →
@@ -476,22 +476,38 @@ export default function Home() {
 
       </section>
 
-      {/* =====================================================
+      {
+            /* =====================================================
           SEVENTH SECTION — TRACK YOUR ORDER
           ===================================================== */}
-      <section className="relative overflow-hidden bg-[#111111] px-6 py-28 md:px-12 lg:px-20">
+      <section
+        className="relative overflow-hidden px-6 py-28 md:px-12 lg:px-20"
+        style={{
+          backgroundImage: 'url("/media/shopping-bag.png")',
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+
+        {/* Dark cinematic overlay */}
+        <div className="absolute inset-0 bg-black/55" />
+        {/* Cinematic depth / vignette */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_12%,rgba(0,0,0,0.30)_55%,rgba(0,0,0,0.72)_100%)]" />
+        {/* Subtle bottom fade */}
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#111111] to-transparent" />
 
         <div
           className="
+            relative
             mx-auto
             max-w-7xl
             overflow-hidden
             rounded-[32px]
             border
             border-white/15
-            bg-white/[0.045]
-            p-8
-            backdrop-blur-xl
+            bg-white/[0.015]
+p-8
+backdrop-blur-[2px]
             md:p-12
             lg:p-16
           "
@@ -523,27 +539,30 @@ export default function Home() {
               className="
   group relative inline-flex items-center justify-center
   overflow-hidden rounded-full
-  border border-white/20
-  bg-white px-7 py-3
-  text-sm font-semibold tracking-[0.12em] text-black
-  transition-all duration-300
+  border border-orange-400/40
+  bg-[#b45309]
+  px-7 py-3
+  text-sm font-semibold tracking-[0.12em] text-white
+  shadow-[0_8px_30px_rgba(180,83,9,0.18)]
+  transition-all duration-500 ease-out
   hover:-translate-y-1
-  hover:bg-white/90
-  hover:shadow-[0_10px_35px_rgba(255,255,255,0.18)]
+  hover:border-orange-300/70
+  hover:bg-[#c4620a]
+  hover:shadow-[0_14px_40px_rgba(180,83,9,0.38)]
   active:translate-y-0
 "
             >
-             <span>TRACK YOUR ORDER</span>
+              <span>TRACK YOUR ORDER</span>
 
-<span
-  className="
-    ml-3 inline-block
-    transition-transform duration-300
-    group-hover:translate-x-1
-  "
->
-  →
-</span>
+              <span
+                className="
+                  ml-3 inline-block
+                  transition-transform duration-300
+                  group-hover:translate-x-1
+                "
+              >
+                →
+              </span>
             </Link>
 
           </div>
@@ -551,8 +570,8 @@ export default function Home() {
         </div>
 
       </section>
-
-      {/* =====================================================
+      {
+      /* =====================================================
           FOOTER
           ===================================================== */}
       <footer className="border-t border-white/10 bg-black px-6 py-12">

@@ -49,8 +49,23 @@ export default function AccountPage() {
   }
 
   return (
-    <main className="min-h-screen bg-black px-6 py-32 text-white">
-      <div className="mx-auto max-w-5xl">
+   <main
+  className="relative min-h-screen overflow-hidden px-6 py-32 text-white"
+  style={{
+    backgroundImage: 'url("/media/shopping-bag.png")',
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundAttachment: "fixed",
+  }}
+>
+  {/* Dark cinematic overlay */}
+  <div className="absolute inset-0 bg-black/55" />
+
+  {/* Cinematic vignette */}
+  <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_12%,rgba(0,0,0,0.28)_55%,rgba(0,0,0,0.72)_100%)]" />
+
+  <div className="relative mx-auto max-w-5xl">
+      
         <div>
           <p className="text-sm tracking-[0.3em] text-white/50">
             MIZO DEALS
