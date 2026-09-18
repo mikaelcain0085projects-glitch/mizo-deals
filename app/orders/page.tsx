@@ -26,6 +26,7 @@ type OrderItem = {
   price: number;
   size: string | null;
   color: string | null;
+  image_url: string | null;
 };
 
 type OrderWithItems = Order & {
@@ -125,9 +126,53 @@ export default function OrdersPage() {
 
       const items = itemData ?? [];
 
+      const productIds = [
+        ...new Set(items.map((item) => item.product_id)),
+      ];
+
+      let imageByProductId = new Map<string, string | null>();
+
+      if (productIds.length > 0) {
+        const { data: productData, error: productError } = await supabase
+          .from("products")
+          .select("id, images")
+          .in("id", productIds);
+
+        if (productError) {
+          console.error("Error loading product images:", productError);
+        } else {
+          imageByProductId = new Map(
+            (productData ?? []).map((product) => {
+              const images = product.images;
+const firstImage = Array.isArray(images)
+  ? images[0]
+  : typeof images === "string"
+    ? images
+    : null;
+
+const imageUrl =
+  typeof firstImage === "string"
+    ? firstImage
+    : firstImage &&
+        typeof firstImage === "object" &&
+        typeof firstImage.url === "string"
+      ? firstImage.url
+      : null;
+
+return [product.id, imageUrl];
+            })
+          );
+        }
+      }
+
       const ordersWithItems: OrderWithItems[] = orderData.map((order) => ({
         ...order,
-        items: items.filter((item) => item.order_id === order.id),
+        items: items
+          .filter((item) => item.order_id === order.id)
+          .map((item) => ({
+            ...item,
+            image_url: imageByProductId.get(item.product_id) ?? null,
+          })),
       }));
 
       setOrders(ordersWithItems);
@@ -325,8 +370,24 @@ export default function OrdersPage() {
   }
 
   return (
-    <main className="min-h-screen bg-black px-6 py-32 text-white">
-      <div className="mx-auto max-w-5xl">
+    <main
+  className="relative min-h-screen overflow-hidden px-6 py-32 text-white"
+  style={{
+    backgroundImage: 'url("/media/shopping-bag.png")',
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundAttachment: "fixed",
+  }}
+>
+  {/* Dark cinematic overlay */}
+  <div className="absolute inset-0 bg-black/55" />
+
+  {/* Cinematic vignette */}
+  <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_10%,rgba(0,0,0,0.30)_50%,rgba(0,0,0,0.92)_100%)]" />
+
+<div className="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-black via-black/80 to-transparent" />
+
+      <div className="relative mx-auto max-w-5xl">
         {/* Header */}
         <div>
           <p className="text-sm tracking-[0.3em] text-white/50">
@@ -398,11 +459,26 @@ export default function OrdersPage() {
                     onClick={() => toggleOrder(order.id)}
                     className="w-full p-6 text-left transition hover:bg-white/[0.07] md:p-8"
                   >
-                    <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-                      <div>
-                        <p className="text-xs uppercase tracking-[0.2em] text-white/40">
-                          Order
-                        </p>
+                    <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+                      <div className="flex min-w-0 items-center gap-4">
+                        {order.items[0]?.image_url ? (
+                          <div className="h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-white/15 bg-black/30 shadow-[0_4px_16px_rgba(0,0,0,0.2)]">
+                            <img
+                              src={order.items[0].image_url}
+                              alt={order.items[0].product_name}
+                              className="h-full w-full object-cover"
+                            />
+                          </div>
+                        ) : (
+                          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-white/30">
+                            <span className="text-lg">◇</span>
+                          </div>
+                        )}
+
+                        <div className="min-w-0">
+                          <p className="text-xs uppercase tracking-[0.2em] text-white/40">
+                            Order
+                          </p>
 
                         <p className="mt-2 break-all font-mono text-sm text-white/80">
                           #{order.id}
@@ -411,6 +487,7 @@ export default function OrdersPage() {
                         <p className="mt-3 text-sm text-white/40">
                           {formatDate(order.created_at)}
                         </p>
+                        </div>
                       </div>
 
                       <div className="flex flex-wrap items-center gap-4">
@@ -426,9 +503,9 @@ export default function OrdersPage() {
                           {formatCurrency(order.total)}
                         </span>
 
-                        <span className="text-white/40">
-                          {isExpanded ? "−" : "+"}
-                        </span>
+                        <span className="text-xl text-white/70">
+  {isExpanded ? "−" : "+"}
+</span>
                       </div>
                     </div>
                   </button>
