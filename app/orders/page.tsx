@@ -7,8 +7,8 @@ import { createClient } from "../../lib/supabase-browser";
 
 type Order = {
   id: string;
-  status: string;
-  total: number;
+  order_number: number;
+  status: string;  total: number;
   payment_status: string;
   payment_id: string | null;
   payment_method: string;
@@ -43,6 +43,7 @@ const CANCELLATION_REASONS = [
 ];
 
 export default function OrdersPage() {
+  
   const router = useRouter();
   const supabase = useMemo(() => createClient(), []);
 
@@ -76,8 +77,9 @@ export default function OrdersPage() {
         .select(
           `
             id,
-            status,
-            total,
+order_number,
+status,
+total,
             payment_status,
             payment_id,
             payment_method,
@@ -175,8 +177,9 @@ return [product.id, imageUrl];
           })),
       }));
 
-      setOrders(ordersWithItems);
-      setLoading(false);
+      
+setOrders(ordersWithItems);
+setLoading(false);
     }
 
     loadOrders();
@@ -480,10 +483,9 @@ return [product.id, imageUrl];
                             Order
                           </p>
 
-                        <p className="mt-2 break-all font-mono text-sm text-white/80">
-                          #{order.id}
-                        </p>
-
+                        <p className="mt-2 font-mono text-sm text-white/80">
+  #MD-OID-{String(order.order_number).padStart(6, "0")}
+</p>
                         <p className="mt-3 text-sm text-white/40">
                           {formatDate(order.created_at)}
                         </p>

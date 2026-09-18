@@ -141,23 +141,26 @@ export default async function AdminPage() {
             </p>
           </Link>
 
-          <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/40">
-              Customers
-            </p>
+          <Link
+  href="/admin/enquiries"
+  className="group rounded-2xl border border-white/10 bg-white/[0.04] p-6 transition hover:-translate-y-1 hover:border-orange-400/30 hover:bg-white/[0.07]"
+>
+  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/40">
+    Enquiries
+  </p>
 
-            <h3 className="mt-3 text-xl font-semibold">
-              Customer Management
-            </h3>
+  <h3 className="mt-3 text-xl font-semibold">
+    Customer Enquiries
+  </h3>
 
-            <p className="mt-2 text-sm leading-6 text-white/50">
-              View registered customers and their account information.
-            </p>
+  <p className="mt-2 text-sm leading-6 text-white/50">
+    View and manage questions, requests, and messages from customers.
+  </p>
 
-            <p className="mt-6 text-xs font-semibold tracking-[0.15em] text-white/30">
-              COMING NEXT
-            </p>
-          </div>
+  <p className="mt-6 text-xs font-semibold tracking-[0.15em] text-white/60 transition group-hover:text-orange-300">
+    OPEN →
+  </p>
+</Link>
 
           <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/40">

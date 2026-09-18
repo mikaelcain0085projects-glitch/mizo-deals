@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "../../../lib/supabase-server";
 
 type Order = {
+  order_number: number;
   id: string;
   user_id: string;
   status: string;
@@ -352,9 +353,9 @@ export default async function AdminOrdersPage() {
                           Order ID
                         </p>
 
-                        <p className="mt-2 break-all font-mono text-sm text-white/80">
-                          {order.id}
-                        </p>
+                        <p className="mt-2 font-mono text-sm text-white/80">
+  #MD-OID-{String(order.order_number).padStart(6, "0")}
+</p>
 
                         <p className="mt-3 text-sm text-white/40">
                           {formatDate(order.created_at)}

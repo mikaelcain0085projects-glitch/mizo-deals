@@ -1,5 +1,9 @@
+"use client";
+
 import Image from "next/image";
+import EnquiryModal from "@/components/EnquiryModal";
 import Link from "next/link";
+import { useState } from "react";
 import LandingHero from "../components/LandingHero";
 import Navbar from "../components/Navbar";
 import FloatingParticles from "@/components/FloatingParticles";
@@ -32,6 +36,8 @@ const categories = [
 ];
 
 export default function Home() {
+    const [enquiryOpen, setEnquiryOpen] = useState(false);
+
   return (
     <main className="bg-black text-white">
       <FloatingParticles />
@@ -339,116 +345,107 @@ export default function Home() {
         </div>
       </section>
 
-      {/* =====================================================
-          FIFTH SECTION — BUILT AROUND THE DETAILS
-          ===================================================== */}
-      <section className="bg-black px-6 py-28 text-white md:px-12 lg:px-20">
+      {
+      
+      /* =====================================================
+    FIFTH SECTION — ENQUIRY
+    ===================================================== */}
+<section
+  className="relative overflow-hidden px-6 py-32 text-white md:px-12 lg:px-20"
+  style={{
+    backgroundImage: 'url("/media/contact-background.png")',
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  }}
+>
+  {/* Dark cinematic overlay */}
+  <div className="absolute inset-0 bg-black/60" />
 
-        <div className="mx-auto max-w-7xl">
+  {/* Subtle cinematic gradient */}
+  <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_10%,rgba(0,0,0,0.35)_55%,rgba(0,0,0,0.85)_100%)]" />
 
-          <div className="mb-16 max-w-2xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-white/35">
-              WHAT WE STAND FOR
-            </p>
+  {/* Bottom transition */}
+  <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black to-transparent" />
 
-            <h2 className="mt-6 text-5xl font-semibold leading-[0.95] tracking-[-0.04em] md:text-7xl">
-              BUILT AROUND
-              <br />
-              THE DETAILS.
-            </h2>
-          </div>
+  {/* Content */}
+  <div className="relative z-10 mx-auto flex max-w-5xl flex-col items-center text-center">
 
-          <div className="grid gap-5 md:grid-cols-2">
+    <p className="text-xs font-semibold uppercase tracking-[0.4em] text-white/45">
+      LET'S CONNECT
+    </p>
 
-            {[
-              {
-                number: "01",
-                title: "Mizo Identity",
-                text: "A modern fashion space shaped by where we come from and how we choose to move forward.",
-              },
-              {
-                number: "02",
-                title: "Curated Style",
-                text: "Thoughtfully selected clothing and accessories designed to make everyday dressing feel effortless.",
-              },
-              {
-                number: "03",
-                title: "Quality First",
-                text: "We believe good style starts with pieces you actually enjoy wearing, season after season.",
-              },
-              {
-                number: "04",
-                title: "People Matter",
-                text: "Behind every order is a person. We are here to make the shopping experience feel personal.",
-              },
-            ].map((value) => (
+    <h2
+      className="
+        mt-6
+        max-w-4xl
+        text-5xl
+        font-semibold
+        leading-[0.95]
+        tracking-[-0.04em]
+        sm:text-6xl
+        md:text-7xl
+        lg:text-8xl
+      "
+    >
+      HAVE SOMETHING
+      <br />
+      TO ASK?
+    </h2>
 
-              <div
-                key={value.number}
-                className="
-                  group
-                  relative
-                  overflow-hidden
-                  rounded-[28px]
-                  border
-                  border-white/10
-                  bg-white/[0.045]
-                  p-8
-                  backdrop-blur-xl
-                  transition-all
-                  duration-500
-                  hover:-translate-y-1
-                  hover:border-white/25
-                  hover:bg-white/[0.07]
-                  md:p-10
-                "
-              >
+    <p className="mt-7 max-w-xl text-sm leading-7 text-white/60 md:text-base">
+      Whether you have a question about an order, a product, or simply
+      want to know more, we would love to hear from you.
+    </p>
 
-                {/* GLASS HIGHLIGHT */}
-                <div
-                  className="
-                    pointer-events-none
-                    absolute
-                    -right-20
-                    -top-24
-                    h-48
-                    w-48
-                    rounded-full
-                    bg-white/[0.07]
-                    blur-3xl
-                    transition-transform
-                    duration-700
-                    group-hover:translate-x-8
-                    group-hover:translate-y-8
-                  "
-                />
+    {/* Premium Enquiry Button */}
+    <button
+  type="button"
+  onClick={() => setEnquiryOpen(true)}
+  
+      className="
+        group
+        relative
+        mt-10
+        inline-flex
+        items-center
+        justify-center
+        overflow-hidden
+        rounded-full
+        border
+        border-orange-300/40
+        bg-[#b45309]
+        px-8
+        py-4
+        text-sm
+        font-semibold
+        tracking-[0.18em]
+        text-white
+        shadow-[0_10px_40px_rgba(180,83,9,0.20)]
+        transition-all
+        duration-500
+        hover:-translate-y-1
+        hover:border-orange-200/70
+        hover:bg-[#c4620a]
+        hover:shadow-[0_16px_50px_rgba(180,83,9,0.40)]
+        active:translate-y-0
+      "
+    >
+      <span>ENQUIRE WITH US</span>
 
-                <div className="relative z-10">
+      <span
+        className="
+          ml-3
+          transition-transform
+          duration-500
+          group-hover:translate-x-1.5
+        "
+      >
+        →
+      </span>
+    </button>
 
-                  <p className="text-xs tracking-[0.25em] text-white/25">
-                    {value.number}
-                  </p>
-
-                  <h3 className="mt-12 text-2xl font-medium tracking-tight">
-                    {value.title}
-                  </h3>
-
-                  <p className="mt-5 max-w-xl text-sm leading-7 text-white/50 md:text-base">
-                    {value.text}
-                  </p>
-
-                </div>
-
-              </div>
-
-            ))}
-
-          </div>
-
-        </div>
-
-      </section>
-
+  </div>
+</section>
       {/* =====================================================
           SIXTH SECTION — BRAND STATEMENT
           ===================================================== */}
@@ -585,6 +582,10 @@ backdrop-blur-[2px]
         </div>
 
       </footer>
+      <EnquiryModal
+  open={enquiryOpen}
+  onClose={() => setEnquiryOpen(false)}
+/>
 
     </main>
   );
