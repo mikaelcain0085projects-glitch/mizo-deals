@@ -1,151 +1,96 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { createClient } from "../../../lib/supabase-browser";
 
 export default function LoginPage() {
-  const router = useRouter();
   const supabase = createClient();
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  async function handleLogin(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
+  async function handleGoogleLogin() {
     setError("");
     setLoading(true);
 
-    const { error: loginError } =
-      await supabase.auth.signInWithPassword({
-        email,
-        password,
+    const { error: googleError } =
+      await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
       });
 
-    if (loginError) {
-      setError(loginError.message);
+    if (googleError) {
+      setError(googleError.message);
       setLoading(false);
-      return;
     }
-
-    router.push("/account");
-    router.refresh();
   }
 
   return (
-    <main className="min-h-screen bg-black px-6 py-32 text-white">
-      <div className="mx-auto max-w-md">
-
-        {/* HEADER */}
+    <main className="flex min-h-screen items-center justify-center bg-black px-6 py-16 text-white">
+      <div className="w-full max-w-md">
         <div className="text-center">
-          <p className="text-sm tracking-[0.3em] text-white/50">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/40">
             MIZO DEALS
           </p>
 
-          <h1 className="mt-4 text-4xl font-semibold">
-            Welcome Back
+          <h1 className="mt-4 text-4xl font-semibold tracking-tight">
+            Welcome
           </h1>
 
-          <p className="mt-4 text-white/50">
-            Login to continue shopping.
+          <p className="mt-3 text-sm text-white/50">
+            Continue with your Google account to shop.
           </p>
         </div>
 
-        {/* LOGIN FORM */}
-        <form
-          onSubmit={handleLogin}
-          className="mt-10 space-y-5"
-        >
-
-          {/* EMAIL */}
-          <div>
-            <label
-              htmlFor="email"
-              className="mb-2 block text-sm text-white/70"
-            >
-              Email
-            </label>
-
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(event) =>
-                setEmail(event.target.value)
-              }
-              required
-              autoComplete="email"
-              placeholder="you@example.com"
-              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 outline-none transition placeholder:text-white/30 focus:border-white/40"
-            />
-          </div>
-
-          {/* PASSWORD */}
-          <div>
-            <label
-              htmlFor="password"
-              className="mb-2 block text-sm text-white/70"
-            >
-              Password
-            </label>
-
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(event) =>
-                setPassword(event.target.value)
-              }
-              required
-              autoComplete="current-password"
-              placeholder="Your password"
-              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 outline-none transition placeholder:text-white/30 focus:border-white/40"
-            />
-          </div>
-
-          {/* ERROR */}
+        <div className="mt-10 rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl md:p-8">
           {error && (
-            <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-300">
+            <div className="mb-5 rounded-xl border border-red-400/20 bg-red-400/10 px-4 py-3 text-sm leading-6 text-red-300">
               {error}
             </div>
           )}
 
-          {/* SUBMIT */}
           <button
-            type="submit"
+            type="button"
+            onClick={handleGoogleLogin}
             disabled={loading}
-            className="w-full rounded-full bg-white px-8 py-4 text-sm font-semibold tracking-widest text-black transition hover:bg-white/80 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex w-full items-center justify-center gap-3 rounded-full border border-white/10 bg-white/[0.06] px-6 py-4 text-sm font-semibold text-white transition hover:border-white/20 hover:bg-white/[0.1] disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {loading ? "LOGGING IN..." : "LOGIN"}
+            {loading ? (
+              "CONNECTING TO GOOGLE..."
+            ) : (
+              <>
+                <span className="text-lg font-bold">G</span>
+                CONTINUE WITH GOOGLE
+              </>
+            )}
           </button>
-        </form>
 
-        {/* REGISTER */}
-        <p className="mt-8 text-center text-sm text-white/50">
-          Don&apos;t have an account?{" "}
-          <Link
-            href="/account/register"
-            className="text-white underline underline-offset-4"
-          >
-            Create Account
-          </Link>
-        </p>
+          <div className="mt-6 flex items-center gap-4">
+            <div className="h-px flex-1 bg-white/10" />
 
-        {/* BACK TO SHOP */}
-        <div className="mt-6 text-center">
-          <Link
-            href="/shop"
-            className="text-sm tracking-widest text-white/40 transition hover:text-white"
-          >
-            ← BACK TO SHOP
-          </Link>
+            <span className="text-xs uppercase tracking-[0.2em] text-white/30">
+              Secure
+            </span>
+
+            <div className="h-px flex-1 bg-white/10" />
+          </div>
+
+          <p className="mt-6 text-center text-xs leading-5 text-white/35">
+            Secure sign-in powered by Google.
+          </p>
         </div>
 
+        <div className="mt-6 text-center">
+          <Link
+            href="/"
+            className="text-sm text-white/50 transition hover:text-white"
+          >
+            ← Back to MIZO DEALS
+          </Link>
+        </div>
       </div>
     </main>
   );

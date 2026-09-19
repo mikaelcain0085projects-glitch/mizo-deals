@@ -6,6 +6,7 @@ export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
 
   const code = searchParams.get("code");
+  const next = searchParams.get("next");
 
   if (code) {
     const cookieStore = await cookies();
@@ -21,11 +22,9 @@ export async function GET(request: Request) {
 
           setAll(cookiesToSet) {
             try {
-              cookiesToSet.forEach(
-                ({ name, value, options }) => {
-                  cookieStore.set(name, value, options);
-                }
-              );
+              cookiesToSet.forEach(({ name, value, options }) => {
+                cookieStore.set(name, value, options);
+              });
             } catch {
               // Cookie setting can fail in some server contexts.
             }
@@ -34,13 +33,38 @@ export async function GET(request: Request) {
       }
     );
 
-    const { error } =
+    const { data, error } =
       await supabase.auth.exchangeCodeForSession(code);
 
-    if (!error) {
-      return NextResponse.redirect(
-        `${origin}/account`
-      );
+    if (!error && data.user) {
+      const { data: profile, error: profileError } =
+        await supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", data.user.id)
+          .maybeSingle();
+
+      if (profileError) {
+        await supabase.auth.signOut();
+
+        return NextResponse.redirect(
+          `${origin}/admin/login?error=profile_check_failed`
+        );
+      }
+
+      if (next === "/admin") {
+        if (!profile || profile.role !== "admin") {
+          await supabase.auth.signOut();
+
+          return NextResponse.redirect(
+            `${origin}/admin/login?error=admin_access_denied`
+          );
+        }
+
+        return NextResponse.redirect(`${origin}/admin`);
+      }
+
+      return NextResponse.redirect(`${origin}/account`);
     }
   }
 

@@ -8,7 +8,8 @@ import { createClient } from "../../lib/supabase-browser";
 type Order = {
   id: string;
   order_number: number;
-  status: string;  total: number;
+  status: string;
+  total: number;
   payment_status: string;
   payment_id: string | null;
   payment_method: string;
@@ -43,7 +44,6 @@ const CANCELLATION_REASONS = [
 ];
 
 export default function OrdersPage() {
-  
   const router = useRouter();
   const supabase = useMemo(() => createClient(), []);
 
@@ -77,9 +77,9 @@ export default function OrdersPage() {
         .select(
           `
             id,
-order_number,
-status,
-total,
+            order_number,
+            status,
+            total,
             payment_status,
             payment_id,
             payment_method,
@@ -146,22 +146,23 @@ total,
           imageByProductId = new Map(
             (productData ?? []).map((product) => {
               const images = product.images;
-const firstImage = Array.isArray(images)
-  ? images[0]
-  : typeof images === "string"
-    ? images
-    : null;
 
-const imageUrl =
-  typeof firstImage === "string"
-    ? firstImage
-    : firstImage &&
-        typeof firstImage === "object" &&
-        typeof firstImage.url === "string"
-      ? firstImage.url
-      : null;
+              const firstImage = Array.isArray(images)
+                ? images[0]
+                : typeof images === "string"
+                  ? images
+                  : null;
 
-return [product.id, imageUrl];
+              const imageUrl =
+                typeof firstImage === "string"
+                  ? firstImage
+                  : firstImage &&
+                      typeof firstImage === "object" &&
+                      typeof firstImage.url === "string"
+                    ? firstImage.url
+                    : null;
+
+              return [product.id, imageUrl];
             })
           );
         }
@@ -177,9 +178,8 @@ return [product.id, imageUrl];
           })),
       }));
 
-      
-setOrders(ordersWithItems);
-setLoading(false);
+      setOrders(ordersWithItems);
+      setLoading(false);
     }
 
     loadOrders();
@@ -374,21 +374,21 @@ setLoading(false);
 
   return (
     <main
-  className="relative min-h-screen overflow-hidden px-6 py-32 text-white"
-  style={{
-    backgroundImage: 'url("/media/shopping-bag.png")',
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundAttachment: "fixed",
-  }}
->
-  {/* Dark cinematic overlay */}
-  <div className="absolute inset-0 bg-black/55" />
+      className="relative min-h-screen overflow-hidden px-6 py-32 text-white"
+      style={{
+        backgroundImage: 'url("/media/shopping-bag.png")',
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+      }}
+    >
+      {/* Dark cinematic overlay */}
+      <div className="absolute inset-0 bg-black/55" />
 
-  {/* Cinematic vignette */}
-  <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_10%,rgba(0,0,0,0.30)_50%,rgba(0,0,0,0.92)_100%)]" />
+      {/* Cinematic vignette */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_10%,rgba(0,0,0,0.30)_50%,rgba(0,0,0,0.92)_100%)]" />
 
-<div className="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-black via-black/80 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-black via-black/80 to-transparent" />
 
       <div className="relative mx-auto max-w-5xl">
         {/* Header */}
@@ -483,12 +483,17 @@ setLoading(false);
                             Order
                           </p>
 
-                        <p className="mt-2 font-mono text-sm text-white/80">
-  #MD-OID-{String(order.order_number).padStart(6, "0")}
-</p>
-                        <p className="mt-3 text-sm text-white/40">
-                          {formatDate(order.created_at)}
-                        </p>
+                          <p className="mt-2 font-mono text-sm text-white/80">
+                            #MD-OID-
+                            {String(order.order_number).padStart(
+                              6,
+                              "0"
+                            )}
+                          </p>
+
+                          <p className="mt-3 text-sm text-white/40">
+                            {formatDate(order.created_at)}
+                          </p>
                         </div>
                       </div>
 
@@ -506,8 +511,8 @@ setLoading(false);
                         </span>
 
                         <span className="text-xl text-white/70">
-  {isExpanded ? "−" : "+"}
-</span>
+                          {isExpanded ? "−" : "+"}
+                        </span>
                       </div>
                     </div>
                   </button>
@@ -576,8 +581,8 @@ setLoading(false);
                           </div>
                         )}
 
-                      {/* Cancel Order */}
-                      {canCancel && (
+                      {/* Cancel Order / Cancellation unavailable */}
+                      {canCancel ? (
                         <div className="mt-8 border-t border-white/10 pt-8">
                           {cancellingOrder === order.id ? (
                             <div className="rounded-2xl border border-red-400/20 bg-red-400/5 p-5">
@@ -686,6 +691,21 @@ setLoading(false);
                             </button>
                           )}
                         </div>
+                      ) : (
+                        order.status !== "cancelled" && (
+                          <div className="mt-8 border-t border-white/10 pt-8">
+                            <div className="rounded-2xl border border-orange-400/20 bg-orange-400/5 p-5">
+                              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-300">
+                                Cancellation unavailable
+                              </p>
+
+                              <p className="mt-2 text-sm leading-6 text-white/60">
+                                You cannot cancel this order after it has
+                                entered Processing.
+                              </p>
+                            </div>
+                          </div>
+                        )
                       )}
 
                       {/* UPI payment ID */}

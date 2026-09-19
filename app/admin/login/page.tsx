@@ -1,18 +1,39 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "../../../lib/supabase-browser";
 
 export default function AdminLoginPage() {
   const router = useRouter();
   const supabase = createClient();
+  
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState("");
+  useEffect(() => {
+  const errorCode = new URLSearchParams(window.location.search).get(
+    "error"
+  );
+
+  if (errorCode === "admin_access_denied") {
+    setError(
+      "Access denied. This Google account does not have administrator access."
+    );
+  } else if (errorCode === "profile_check_failed") {
+    setError(
+      "We couldn't verify administrator access. Please try again."
+    );
+  } else if (errorCode === "auth_callback_failed") {
+    setError(
+      "Google sign-in could not be completed. Please try again."
+    );
+  }
+}, []);
 
   async function handleLogin(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -64,6 +85,24 @@ export default function AdminLoginPage() {
 
     router.push("/admin");
     router.refresh();
+  }
+
+  async function handleGoogleLogin() {
+    setError("");
+    setGoogleLoading(true);
+
+    const { error: googleError } =
+      await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback?next=/admin`,
+        },
+      });
+
+    if (googleError) {
+      setError(googleError.message);
+      setGoogleLoading(false);
+    }
   }
 
   return (
@@ -135,10 +174,34 @@ export default function AdminLoginPage() {
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || googleLoading}
             className="mt-6 w-full rounded-full bg-white px-6 py-4 text-sm font-semibold tracking-[0.18em] text-black transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? "SIGNING IN..." : "ADMIN LOGIN"}
+          </button>
+
+          <div className="my-6 flex items-center gap-4">
+            <div className="h-px flex-1 bg-white/10" />
+            <span className="text-xs uppercase tracking-[0.2em] text-white/30">
+              Or
+            </span>
+            <div className="h-px flex-1 bg-white/10" />
+          </div>
+
+          <button
+            type="button"
+            onClick={handleGoogleLogin}
+            disabled={loading || googleLoading}
+            className="flex w-full items-center justify-center gap-3 rounded-full border border-white/10 bg-white/[0.04] px-6 py-4 text-sm font-semibold text-white transition hover:border-white/20 hover:bg-white/[0.08] disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {googleLoading ? (
+              "CONNECTING TO GOOGLE..."
+            ) : (
+              <>
+                <span className="text-lg font-bold">G</span>
+                CONTINUE WITH GOOGLE
+              </>
+            )}
           </button>
         </form>
 
@@ -147,14 +210,9 @@ export default function AdminLoginPage() {
             href="/account/login"
             className="text-sm text-white/50 transition hover:text-white"
           >
-            ← Customer Login
+            ← Back to customer login
           </Link>
         </div>
-
-        <p className="mt-8 text-center text-xs leading-5 text-white/30">
-          Administrator access is restricted to approved MIZO DEALS admin
-          accounts.
-        </p>
       </div>
     </main>
   );
