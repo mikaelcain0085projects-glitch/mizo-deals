@@ -164,11 +164,11 @@ export default function EnquiryModal({
             </p>
 
             <h2 className="mt-4 text-3xl font-semibold tracking-[-0.04em] text-white sm:text-5xl">
-              LET'S TALK.
+              LET&apos;S TALK.
             </h2>
 
             <p className="mt-4 max-w-xl text-sm leading-6 text-white/50">
-              Have a question, a request, or something you'd like to know?
+              Have a question, a request, or something you&apos;d like to know?
               Send us a message and our team will get back to you.
             </p>
           </div>

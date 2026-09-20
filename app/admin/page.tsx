@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "../../lib/supabase-server";
@@ -23,10 +24,24 @@ export default async function AdminPage() {
     .eq("id", user.id)
     .maybeSingle();
 
-  // Profile must exist and user must be an admin
+   // Profile must exist and user must be an admin
   if (error || !profile || profile.role !== "admin") {
     redirect("/");
   }
+
+  const { data: latestProduct } = await supabase
+    .from("products")
+    .select("id, name, images")
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  const latestProductImage =
+    Array.isArray(latestProduct?.images) &&
+    latestProduct.images.length > 0 &&
+    typeof latestProduct.images[0]?.url === "string"
+      ? latestProduct.images[0].url
+      : null;
 
   return (
     <main className="min-h-screen bg-black text-white">
@@ -82,9 +97,27 @@ export default async function AdminPage() {
             href="/admin/products"
             className="group rounded-2xl border border-white/10 bg-white/[0.04] p-6 transition hover:border-white/25 hover:bg-white/[0.07]"
           >
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/40">
-              Products
-            </p>
+                        <div className="flex items-center gap-4">
+              {latestProductImage ? (
+                <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-white/5">
+                  <Image
+                    src={latestProductImage}
+                    alt={latestProduct?.name || "Product"}
+                    fill
+                    sizes="48px"
+                    className="object-cover"
+                  />
+                </div>
+              ) : (
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-lg text-white/30">
+                  👕
+                </div>
+              )}
+
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/40">
+                Products
+              </p>
+            </div>
 
             <h3 className="mt-3 text-xl font-semibold">
               Product Management

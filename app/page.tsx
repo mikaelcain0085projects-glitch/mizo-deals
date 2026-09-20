@@ -370,7 +370,7 @@ to-black/5
   <div className="relative z-10 mx-auto flex max-w-5xl flex-col items-center text-center">
 
     <p className="text-xs font-semibold uppercase tracking-[0.4em] text-white/45">
-      LET'S CONNECT
+      LET&apos;S CONNECT
     </p>
 
     <h2
@@ -518,7 +518,7 @@ backdrop-blur-[2px]
               </p>
 
               <h2 className="mt-6 text-5xl font-semibold leading-[0.95] tracking-[-0.04em] md:text-6xl">
-                WHERE'S YOUR
+               WHERE&apos;S YOUR
                 <br />
                 ORDER NOW?
               </h2>

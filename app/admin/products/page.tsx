@@ -1,6 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "../../../lib/supabase-server";
+import AdminDeleteProductButton from "../../../components/AdminDeleteProductButton";
 
 
 
@@ -21,6 +23,7 @@ type Product = {
   stock: number;
   sizes: unknown;
   colors: unknown;
+  images: unknown;
   is_active: boolean;
   created_at: string;
   category_id: string | null;
@@ -95,21 +98,22 @@ export default async function AdminProductsPage({
 
   // Load products
   const { data: products, error: productsError } = await supabase
-    .from("products")
-    .select(`
-      id,
-      name,
-      slug,
-      price,
-      sale_price,
-      stock,
-      sizes,
-      colors,
-      is_active,
-      created_at,
-      category_id
-    `)
-    .order("created_at", { ascending: false });
+  .from("products")
+  .select(`
+    id,
+    name,
+    slug,
+    price,
+    sale_price,
+    stock,
+    sizes,
+    colors,
+    images,
+    is_active,
+    created_at,
+    category_id
+  `)
+  .order("created_at", { ascending: false });
 
   if (productsError) {
     return (
@@ -374,15 +378,36 @@ export default async function AdminProductsPage({
                       >
                         {/* Product */}
                         <td className="px-6 py-5">
-                          <p className="font-medium">
-                            {product.name}
-                          </p>
+  <div className="flex items-center gap-4">
+    {Array.isArray(product.images) &&
+    product.images.length > 0 &&
+    typeof product.images[0]?.url === "string" ? (
+      <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-white/5">
+        <Image
+          src={product.images[0].url}
+          alt={product.name}
+          fill
+          sizes="48px"
+          className="object-cover"
+        />
+      </div>
+    ) : (
+      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-xs text-white/30">
+        —
+      </div>
+    )}
 
-                          <p className="mt-1 text-xs text-white/30">
-                            {product.slug}
-                          </p>
-                        </td>
+    <div>
+      <p className="font-medium">
+        {product.name}
+      </p>
 
+      <p className="mt-1 text-xs text-white/30">
+        {product.slug}
+      </p>
+    </div>
+  </div>
+</td>
                         {/* Category */}
                         <td className="px-6 py-5">
                           <p className="text-sm text-white/80">
@@ -480,13 +505,20 @@ export default async function AdminProductsPage({
 
                         {/* Action */}
                         <td className="px-6 py-5 text-right">
-                          <Link
-                            href={`/admin/products/${product.id}/edit`}
-                            className="text-xs font-semibold tracking-[0.12em] text-white/60 transition hover:text-white"
-                          >
-                            EDIT →
-                          </Link>
-                        </td>
+  <div className="flex items-center justify-end gap-4">
+    <Link
+      href={`/admin/products/${product.id}/edit`}
+      className="text-xs font-semibold tracking-[0.12em] text-white/60 transition hover:text-white"
+    >
+      EDIT →
+    </Link>
+
+    <AdminDeleteProductButton
+      productId={product.id}
+      productName={product.name}
+    />
+  </div>
+</td>
                       </tr>
                     );
                   })}
@@ -526,23 +558,43 @@ export default async function AdminProductsPage({
                     className="p-6"
                   >
                     <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <h2 className="font-medium">
-                          {product.name}
-                        </h2>
+  <div className="flex items-start gap-4">
+    {Array.isArray(product.images) &&
+    product.images.length > 0 &&
+    typeof product.images[0]?.url === "string" ? (
+      <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-white/5">
+        <Image
+          src={product.images[0].url}
+          alt={product.name}
+          fill
+          sizes="56px"
+          className="object-cover"
+        />
+      </div>
+    ) : (
+      <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-xs text-white/30">
+        —
+      </div>
+    )}
 
-                        <p className="mt-1 text-xs text-white/40">
-                          {categoryName}
-                        </p>
+    <div>
+      <h2 className="font-medium">
+        {product.name}
+      </h2>
 
-                        {parentName !== categoryName && (
-                          <p className="mt-1 text-xs text-white/25">
-                            {parentName}
-                          </p>
-                        )}
-                      </div>
+      <p className="mt-1 text-xs text-white/40">
+        {categoryName}
+      </p>
 
-                      <span
+      {parentName !== categoryName && (
+        <p className="mt-1 text-xs text-white/25">
+          {parentName}
+        </p>
+      )}
+    </div>
+  </div>
+
+  <span
                         className={`rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] ${
                           product.is_active
                             ? "bg-green-400/10 text-green-300"
@@ -623,12 +675,19 @@ export default async function AdminProductsPage({
                       </div>
                     </div>
 
-                    <Link
-                      href={`/admin/products/${product.id}/edit`}
-                      className="mt-6 inline-flex rounded-full border border-white/15 px-5 py-2.5 text-xs font-semibold tracking-[0.12em] transition hover:bg-white hover:text-black"
-                    >
-                      EDIT PRODUCT
-                    </Link>
+                   <div className="mt-6 flex items-center gap-4">
+  <Link
+    href={`/admin/products/${product.id}/edit`}
+    className="inline-flex rounded-full border border-white/15 px-5 py-2.5 text-xs font-semibold tracking-[0.12em] transition hover:bg-white hover:text-black"
+  >
+    EDIT PRODUCT
+  </Link>
+
+  <AdminDeleteProductButton
+    productId={product.id}
+    productName={product.name}
+  />
+</div>
                   </div>
                 );
               })}

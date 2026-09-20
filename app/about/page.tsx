@@ -244,7 +244,7 @@ export default function AboutPage() {
               </p>
 
               <h2 className="mt-5 text-4xl font-semibold tracking-[-0.03em] md:text-5xl">
-                WHERE'S YOUR
+                WHERE&apos;S YOUR
                 <br />
                 ORDER NOW?
               </h2>

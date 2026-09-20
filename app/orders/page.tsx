@@ -192,14 +192,19 @@ export default function OrdersPage() {
   }
 
   function formatDate(dateString: string) {
-    return new Date(dateString).toLocaleString("en-IN", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  }
+  const utcDate = dateString.endsWith("Z")
+    ? dateString
+    : `${dateString}Z`;
+
+  return new Date(utcDate).toLocaleString("en-IN", {
+    timeZone: "Asia/Kolkata",
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
 
   function formatCurrency(value: number) {
     return `₹${Number(value).toLocaleString("en-IN", {

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "../../../lib/supabase-browser";
 
@@ -14,26 +14,30 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
-  const [error, setError] = useState("");
-  useEffect(() => {
+  const [error, setError] = useState(() => {
+  if (typeof window === "undefined") {
+    return "";
+  }
+
   const errorCode = new URLSearchParams(window.location.search).get(
     "error"
   );
 
   if (errorCode === "admin_access_denied") {
-    setError(
-      "Access denied. This Google account does not have administrator access."
-    );
-  } else if (errorCode === "profile_check_failed") {
-    setError(
-      "We couldn't verify administrator access. Please try again."
-    );
-  } else if (errorCode === "auth_callback_failed") {
-    setError(
-      "Google sign-in could not be completed. Please try again."
-    );
+    return "Access denied. This Google account does not have administrator access.";
   }
-}, []);
+
+  if (errorCode === "profile_check_failed") {
+    return "We couldn't verify administrator access. Please try again.";
+  }
+
+  if (errorCode === "auth_callback_failed") {
+    return "Google sign-in could not be completed. Please try again.";
+  }
+
+  return "";
+});
+  
 
   async function handleLogin(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();

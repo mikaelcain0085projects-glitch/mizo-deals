@@ -231,14 +231,42 @@ export default async function AdminOrdersPage() {
   }
 
   function formatDate(dateString: string) {
-    return new Date(dateString).toLocaleString("en-IN", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+  let normalized = dateString.trim();
+
+  // PostgreSQL/Supabase may return:
+  // 2026-09-20 17:20:03+00
+  // 2026-09-20 17:20:03+00:00
+  // 2026-09-20T17:20:03+00:00
+  // Normalize the PostgreSQL space separator.
+  normalized = normalized.replace(" ", "T");
+
+  // If no timezone is included, explicitly treat it as UTC.
+  if (
+    !normalized.endsWith("Z") &&
+    !/[+-]\d{2}:?\d{2}$/.test(normalized) &&
+    !/[+-]\d{2}$/.test(normalized)
+  ) {
+    normalized += "Z";
   }
+
+  // PostgreSQL +00 → JavaScript-compatible +00:00
+  normalized = normalized.replace(/([+-]\d{2})$/, "$1:00");
+  console.log("ORDER TIME DEBUG:", {
+  original: dateString,
+  parsed: new Date(dateString).toString(),
+  iso: new Date(dateString).toISOString(),
+});
+
+  return new Date(normalized).toLocaleString("en-IN", {
+    timeZone: "Asia/Kolkata",
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+}
 
   function formatCurrency(value: number) {
     return `₹${Number(value).toLocaleString("en-IN", {
