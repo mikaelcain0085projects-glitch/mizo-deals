@@ -1,4 +1,5 @@
 import Image from "next/image";
+import ShopNavLink from "../../components/ShopNavLink";
 import Link from "next/link";
 import { supabase } from "../../lib/supabase";
 
@@ -266,7 +267,7 @@ export default async function ShopPage({
 <div className="mb-12">
   <Link
     href="/"
-    className="group inline-flex items-center gap-2 text-xl font-normal uppercase tracking-[0.2em] text-orange-500 transition hover:text-orange-300"
+    className="group inline-flex items-center gap-2 text-sm font-normal uppercase tracking-[0.2em] text-orange-500 transition hover:text-orange-300"
   >
     <span className="transition-transform duration-300 group-hover:-translate-x-1">
       ←
@@ -313,7 +314,7 @@ export default async function ShopPage({
     </Link>
 
     {/* MEN */}
-    <Link
+    <ShopNavLink
       href="/shop?category=men"
       className={`group relative rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.12em] transition-all duration-300 ${
         selectedCategory === "men"
@@ -322,10 +323,10 @@ export default async function ShopPage({
       }`}
     >
       Men
-    </Link>
+   </ShopNavLink>
 
     {/* WOMEN */}
-    <Link
+    <ShopNavLink
       href="/shop?category=women"
       className={`group relative rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.12em] transition-all duration-300 ${
         selectedCategory === "women"
@@ -334,10 +335,10 @@ export default async function ShopPage({
       }`}
     >
       Women
-    </Link>
+    </ShopNavLink>
 
     {/* KIDS */}
-    <Link
+     <ShopNavLink
       href="/shop?category=kids"
       className={`group relative rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.12em] transition-all duration-300 ${
         selectedCategory === "kids"
@@ -346,10 +347,10 @@ export default async function ShopPage({
       }`}
     >
       Kids
-    </Link>
+    </ShopNavLink>
 
     {/* ACCESSORIES */}
-    <Link
+     <ShopNavLink
       href="/shop?category=accessories"
       className={`group relative rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.12em] transition-all duration-300 ${
         selectedCategory === "accessories"
@@ -358,7 +359,7 @@ export default async function ShopPage({
       }`}
     >
       Accessories
-    </Link>
+     </ShopNavLink>
   </div>
 </div>
 
@@ -385,7 +386,7 @@ export default async function ShopPage({
             </p>
 
             <div className="flex flex-wrap gap-2.5">
-              <Link
+              <ShopNavLink
                 href={`/shop?category=${currentParentCategory?.slug}`}
                 className="
   rounded-full
@@ -408,11 +409,11 @@ export default async function ShopPage({
 "
               >
                 All {currentParentCategory?.name}
-              </Link>
+              </ShopNavLink>
 
               {currentSubcategories.map(
   (subcategory) => (
-    <Link
+   <ShopNavLink
       key={subcategory.id}
       href={`/shop?category=${subcategory.slug}`}
       className="
@@ -436,7 +437,7 @@ export default async function ShopPage({
       "
     >
       {subcategory.name}
-    </Link>
+   </ShopNavLink>
   )
 )}
             </div>

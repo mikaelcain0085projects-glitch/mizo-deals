@@ -32,8 +32,9 @@ export default function ProductActions({
   );
 
   const [quantity, setQuantity] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [wishlistLoading, setWishlistLoading] = useState(false);
+ const [loading, setLoading] = useState(false);
+const [viewCartLoading, setViewCartLoading] = useState(false);
+const [wishlistLoading, setWishlistLoading] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -264,12 +265,29 @@ export default function ProductActions({
 
           <div className="mt-4 flex flex-wrap gap-3">
             <button
-              type="button"
-              onClick={() => router.push("/cart")}
-              className="rounded-full bg-white px-5 py-2.5 text-xs font-semibold tracking-[0.12em] text-black transition hover:bg-white/90"
-            >
-              VIEW CART →
-            </button>
+  type="button"
+  onClick={() => {
+    setViewCartLoading(true);
+
+    setTimeout(() => {
+      router.push("/cart");
+    }, 150);
+  }}
+  disabled={viewCartLoading}
+  className="rounded-full bg-white px-5 py-2.5 text-xs font-semibold tracking-[0.12em] text-black transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-70"
+>
+  {viewCartLoading ? (
+    <span className="inline-flex items-center gap-2">
+      <span
+        className="h-3 w-3 animate-spin rounded-full border border-black/40 border-t-transparent"
+        aria-hidden="true"
+      />
+      LOADING...
+    </span>
+  ) : (
+    "VIEW CART →"
+  )}
+</button>
 
             <button
               type="button"

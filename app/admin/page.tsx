@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "../../lib/supabase-server";
 import AdminLogout from "../../components/AdminLogout";
+import AdminNavLink from "../../components/AdminNavLink";
 
 export default async function AdminPage() {
   const supabase = await createClient();
@@ -77,7 +78,7 @@ export default async function AdminPage() {
 
         {/* Dashboard cards */}
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          <Link
+          <AdminNavLink
             href="/admin/products"
             className="group rounded-2xl border border-white/10 bg-white/[0.04] p-6 transition hover:border-white/25 hover:bg-white/[0.07]"
           >
@@ -97,9 +98,9 @@ export default async function AdminPage() {
             <p className="mt-6 text-xs font-semibold tracking-[0.15em] text-white/60 transition group-hover:text-white">
               OPEN →
             </p>
-          </Link>
+          </AdminNavLink>
 
-          <Link
+          <AdminNavLink
             href="/admin/orders"
             className="group rounded-2xl border border-white/10 bg-white/[0.04] p-6 transition hover:border-white/25 hover:bg-white/[0.07]"
           >
@@ -118,9 +119,9 @@ export default async function AdminPage() {
             <p className="mt-6 text-xs font-semibold tracking-[0.15em] text-white/60 transition group-hover:text-white">
               OPEN →
             </p>
-          </Link>
+         </AdminNavLink>
 
-          <Link
+         <AdminNavLink
             href="/admin/payments"
             className="group rounded-2xl border border-white/10 bg-white/[0.04] p-6 transition hover:border-white/25 hover:bg-white/[0.07]"
           >
@@ -139,9 +140,9 @@ export default async function AdminPage() {
             <p className="mt-6 text-xs font-semibold tracking-[0.15em] text-white/60 transition group-hover:text-white">
               OPEN →
             </p>
-          </Link>
+         </AdminNavLink>
 
-          <Link
+         <AdminNavLink
   href="/admin/enquiries"
   className="group rounded-2xl border border-white/10 bg-white/[0.04] p-6 transition hover:-translate-y-1 hover:border-orange-400/30 hover:bg-white/[0.07]"
 >
@@ -160,7 +161,7 @@ export default async function AdminPage() {
   <p className="mt-6 text-xs font-semibold tracking-[0.15em] text-white/60 transition group-hover:text-orange-300">
     OPEN →
   </p>
-</Link>
+</AdminNavLink>
 
           <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/40">

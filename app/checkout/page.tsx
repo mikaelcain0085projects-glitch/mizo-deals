@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+
 import { useEffect, useState } from "react";
 import UpiPayment from "../../components/UpiPayment";
 import { createClient } from "../../lib/supabase-browser";
@@ -46,6 +47,7 @@ export default function CheckoutPage() {
     useState<PaymentMethod>("cod");
     const [placingOrder, setPlacingOrder] = useState(false);
 const [orderError, setOrderError] = useState("");
+const [backToCartLoading, setBackToCartLoading] = useState(false);
 
 
   const [shipping, setShipping] = useState<ShippingForm>({
@@ -666,12 +668,30 @@ router.push(`/upi-payment?order=${orderId}`);
     : "CONTINUE TO UPI"}
 </button>
 
-            <Link
-              href="/cart"
-              className="mt-4 block text-center text-sm text-white/50 transition hover:text-white"
-            >
-              ← Back to Cart
-            </Link>
+          <button
+  type="button"
+  onClick={() => {
+    setBackToCartLoading(true);
+
+    requestAnimationFrame(() => {
+      router.push("/cart");
+    });
+  }}
+  disabled={backToCartLoading}
+  className="mt-4 block w-full text-center text-sm text-white/50 transition hover:text-white disabled:cursor-not-allowed disabled:opacity-70"
+>
+  {backToCartLoading ? (
+    <span className="inline-flex items-center justify-center gap-2">
+      <span
+        className="h-3 w-3 animate-spin rounded-full border border-white/50 border-t-transparent"
+        aria-hidden="true"
+      />
+      LOADING...
+    </span>
+  ) : (
+    "← Back to Cart"
+  )}
+</button>
           </aside>
         </div>
       </div>

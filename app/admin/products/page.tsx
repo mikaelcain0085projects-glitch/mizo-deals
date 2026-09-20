@@ -2,6 +2,8 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "../../../lib/supabase-server";
 
+
+
 type Category = {
   id: string;
   name: string;
@@ -23,6 +25,13 @@ type Product = {
   created_at: string;
   category_id: string | null;
 };
+const filterCategories = [
+  { name: "All Products", slug: "" },
+  { name: "Men", slug: "men" },
+  { name: "Women", slug: "women" },
+  { name: "Kids", slug: "kids" },
+  { name: "Accessories", slug: "accessories" },
+];
 
 type AdminProductsPageProps = {
   searchParams: Promise<{
@@ -188,28 +197,7 @@ export default async function AdminProductsPage({
   // FILTER BUTTONS
   // ---------------------------------------------------------
 
-  const filterCategories = [
-    {
-      name: "All Products",
-      slug: "",
-    },
-    {
-      name: "Men",
-      slug: "men",
-    },
-    {
-      name: "Women",
-      slug: "women",
-    },
-    {
-      name: "Kids",
-      slug: "kids",
-    },
-    {
-      name: "Accessories",
-      slug: "accessories",
-    },
-  ];
+  
 
   return (
     <main className="min-h-screen bg-black text-white">
@@ -258,29 +246,29 @@ export default async function AdminProductsPage({
           </div>
 
           <div className="flex flex-wrap gap-3">
-            {filterCategories.map((filter) => {
-              const isSelected =
-                selectedCategory === filter.slug;
+  {filterCategories.map((filter) => {
+    const isSelected =
+      selectedCategory === filter.slug;
 
-              return (
-                <Link
-                  key={filter.slug || "all"}
-                  href={
-                    filter.slug
-                      ? `/admin/products?category=${filter.slug}`
-                      : "/admin/products"
-                  }
-                  className={`rounded-full border px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.12em] transition ${
-                    isSelected
-                      ? "border-white bg-white text-black"
-                      : "border-white/15 text-white/60 hover:border-white/40 hover:text-white"
-                  }`}
-                >
-                  {filter.name}
-                </Link>
-              );
-            })}
-          </div>
+    return (
+      <Link
+        key={filter.slug || "all"}
+        href={
+          filter.slug
+            ? `/admin/products?category=${filter.slug}`
+            : "/admin/products"
+        }
+        className={`rounded-full border px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.12em] transition ${
+          isSelected
+            ? "border-white bg-white text-black"
+            : "border-white/15 text-white/60 hover:border-white/40 hover:text-white"
+        }`}
+      >
+        {filter.name}
+      </Link>
+    );
+  })}
+</div>
         </div>
 
         {/* FILTER RESULT */}
