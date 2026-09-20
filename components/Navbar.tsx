@@ -49,35 +49,35 @@ export default function Navbar() {
         <nav className="relative z-10 hidden items-center gap-1 md:flex">
           <Link
             href="/shop"
-            className="rounded-full px-4 py-2 text-xs font-medium tracking-[0.18em] text-white/50 transition-all duration-300 hover:bg-white/10 hover:text-white"
+            className="rounded-full px-4 py-2 text-xs font-medium tracking-[0.18em] text-white/80 transition-all duration-300 hover:bg-white/10 hover:text-[#b45309]"
           >
             SHOP
           </Link>
 
           <Link
             href="/shop?category=men"
-            className="rounded-full px-4 py-2 text-xs font-medium tracking-[0.18em] text-white/50 transition-all duration-300 hover:bg-white/10 hover:text-white"
+            className="rounded-full px-4 py-2 text-xs font-medium tracking-[0.18em] text-white/80 transition-all duration-300 hover:bg-white/10 hover:text-[#b45309]"
           >
             MEN
           </Link>
 
           <Link
             href="/shop?category=women"
-            className="rounded-full px-4 py-2 text-xs font-medium tracking-[0.18em] text-white/50 transition-all duration-300 hover:bg-white/10 hover:text-white"
+            className="rounded-full px-4 py-2 text-xs font-medium tracking-[0.18em] text-white/80 transition-all duration-300 hover:bg-white/10 hover:text-[#b45309]"
           >
             WOMEN
           </Link>
 
           <Link
             href="/shop?category=kids"
-            className="rounded-full px-4 py-2 text-xs font-medium tracking-[0.18em] text-white/50 transition-all duration-300 hover:bg-white/10 hover:text-white"
+            className="rounded-full px-4 py-2 text-xs font-medium tracking-[0.18em] text-white/80 transition-all duration-300 hover:bg-white/10 hover:text-[#b45309]"
           >
             KIDS
           </Link>
 
           <Link
             href="/shop?category=accessories"
-            className="rounded-full px-4 py-2 text-xs font-medium tracking-[0.18em] text-white/50 transition-all duration-300 hover:bg-white/10 hover:text-white"
+            className="rounded-full px-4 py-2 text-xs font-medium tracking-[0.18em] text-white/80 transition-all duration-300 hover:bg-white/10 hover:text-[#b45309]"
           >
             ACCESSORIES
           </Link>
@@ -119,7 +119,7 @@ export default function Navbar() {
             className="
               hidden rounded-full px-4 py-2
               text-xs font-semibold tracking-[0.12em]
-              text-white/70 transition-all duration-300
+              text-[#b45309] transition-all duration-300
               hover:bg-white hover:text-black sm:block
             "
           >
@@ -250,7 +250,7 @@ export default function Navbar() {
                   text-center text-[10px] font-semibold
                   tracking-[0.15em] text-white/60
                   transition-all duration-300
-                  hover:border-white/25 hover:bg-white/10 hover:text-white
+                  hover:border-white/25 hover:bg-white/30 hover:text-white
                 "
               >
                 ACCOUNT

@@ -133,9 +133,9 @@ export default function Home() {
                     absolute
                     inset-0
                     bg-gradient-to-r
-                    from-black/90
-                    via-black/55
-                    to-black/15
+                    from-black/65
+via-black/30
+to-black/5
                     transition-all
                     duration-500
                     group-hover:from-black/75
@@ -276,7 +276,7 @@ export default function Home() {
 
               <Link
                 href="/shop"
-                className="rounded-full bg-white px-8 py-4 text-xs font-semibold uppercase tracking-[0.2em] text-black transition-all duration-300 hover:-translate-y-1 hover:bg-white/90"
+                className="rounded-full bg-white/60 px-8 py-4 text-xs font-semibold uppercase tracking-[0.2em] text-black transition-all duration-300 hover:-translate-y-1 hover:bg-white/70"
               >
                 EXPLORE COLLECTION
               </Link>
@@ -359,8 +359,7 @@ export default function Home() {
   }}
 >
   {/* Dark cinematic overlay */}
-  <div className="absolute inset-0 bg-black/60" />
-
+  <div className="absolute inset-0 bg-black/25" />
   {/* Subtle cinematic gradient */}
   <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_10%,rgba(0,0,0,0.35)_55%,rgba(0,0,0,0.85)_100%)]" />
 
@@ -450,7 +449,7 @@ export default function Home() {
           SIXTH SECTION — BRAND STATEMENT
           ===================================================== */}
       <section className="relative overflow-hidden border-y border-white/10 bg-[#0d0d0d] px-6 py-32 md:px-12 lg:px-20">
-
+  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_75%_50%,rgba(180,83,9,0.16),transparent_45%)]" />
         <div className="mx-auto max-w-5xl text-center">
 
           <p className="text-xs font-semibold uppercase tracking-[0.4em] text-white/30">
@@ -487,9 +486,9 @@ export default function Home() {
       >
 
         {/* Dark cinematic overlay */}
-        <div className="absolute inset-0 bg-black/55" />
+       <div className="absolute inset-0 bg-black/25" />
         {/* Cinematic depth / vignette */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_12%,rgba(0,0,0,0.30)_55%,rgba(0,0,0,0.72)_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_12%,rgba(0,0,0,0.18)_55%,rgba(0,0,0,0.42)_100%)]" />
         {/* Subtle bottom fade */}
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#111111] to-transparent" />
 
