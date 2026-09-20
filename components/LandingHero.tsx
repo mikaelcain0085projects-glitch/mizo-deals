@@ -15,16 +15,18 @@ export default function LandingHero() {
   const [activeSlide, setActiveSlide] = useState(0);
 
   useEffect(() => {
-    const slideshowTimer = setInterval(() => {
-      setActiveSlide((current) => {
-        return (current + 1) % HERO_IMAGES.length;
-      });
-    }, 1500);
+  const duration = activeSlide === 0 ? 3000 : 2000;
 
-    return () => {
-      clearInterval(slideshowTimer);
-    };
-  }, []);
+  const slideshowTimer = setTimeout(() => {
+    setActiveSlide((current) => {
+      return (current + 1) % HERO_IMAGES.length;
+    });
+  }, duration);
+
+  return () => {
+    clearTimeout(slideshowTimer);
+  };
+}, [activeSlide]);
 
   return (
     <section className="relative h-screen w-full overflow-hidden bg-black">
@@ -61,15 +63,15 @@ export default function LandingHero() {
       {/* CINEMATIC OVERLAYS                                */}
       {/* ------------------------------------------------ */}
 
-      <div className="absolute inset-0 bg-black/25" />
+      <div className="absolute inset-0 bg-black/05" />
 
       <div
         className="
           absolute inset-0
           bg-gradient-to-t
-          from-black
-          via-black/20
-          to-black/25
+from-black/70
+via-black/10
+to-transparent
         "
       />
 
@@ -158,7 +160,7 @@ export default function LandingHero() {
             transition-all
             duration-500
             hover:-translate-y-1
-            hover:bg-white
+            hover:bg-white/30
             hover:text-black
           "
         >
