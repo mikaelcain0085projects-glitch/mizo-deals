@@ -109,18 +109,18 @@ export default function OrdersPage() {
       const { data: itemData, error: itemError } = await supabase
         .from("order_items")
         .select(
-          `
-            id,
-            order_id,
-            product_id,
-            product_name,
-            quantity,
-            price,
-            size,
-            color
-          `
-        )
-        .in("order_id", orderIds);
+  `
+    id,
+    order_id,
+    product_id,
+    product_name,
+    quantity,
+    price,
+    size,
+    color,
+    image_url
+  `
+)
 
       if (itemError) {
         console.error("Error loading order items:", itemError);
@@ -128,55 +128,16 @@ export default function OrdersPage() {
 
       const items = itemData ?? [];
 
-      const productIds = [
-        ...new Set(items.map((item) => item.product_id)),
-      ];
-
-      let imageByProductId = new Map<string, string | null>();
-
-      if (productIds.length > 0) {
-        const { data: productData, error: productError } = await supabase
-          .from("products")
-          .select("id, images")
-          .in("id", productIds);
-
-        if (productError) {
-          console.error("Error loading product images:", productError);
-        } else {
-          imageByProductId = new Map(
-            (productData ?? []).map((product) => {
-              const images = product.images;
-
-              const firstImage = Array.isArray(images)
-                ? images[0]
-                : typeof images === "string"
-                  ? images
-                  : null;
-
-              const imageUrl =
-                typeof firstImage === "string"
-                  ? firstImage
-                  : firstImage &&
-                      typeof firstImage === "object" &&
-                      typeof firstImage.url === "string"
-                    ? firstImage.url
-                    : null;
-
-              return [product.id, imageUrl];
-            })
-          );
-        }
-      }
-
+      
       const ordersWithItems: OrderWithItems[] = orderData.map((order) => ({
-        ...order,
-        items: items
-          .filter((item) => item.order_id === order.id)
-          .map((item) => ({
-            ...item,
-            image_url: imageByProductId.get(item.product_id) ?? null,
-          })),
-      }));
+  ...order,
+  items: items
+    .filter((item) => item.order_id === order.id)
+    .map((item) => ({
+      ...item,
+      image_url: item.image_url ?? null,
+    })),
+}));
 
       setOrders(ordersWithItems);
       setLoading(false);
@@ -192,11 +153,7 @@ export default function OrdersPage() {
   }
 
   function formatDate(dateString: string) {
-  const utcDate = dateString.endsWith("Z")
-    ? dateString
-    : `${dateString}Z`;
-
-  return new Date(utcDate).toLocaleString("en-IN", {
+  return new Date(dateString).toLocaleString("en-IN", {
     timeZone: "Asia/Kolkata",
     day: "2-digit",
     month: "short",
