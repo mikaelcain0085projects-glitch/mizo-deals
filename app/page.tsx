@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useState } from "react";
 import LandingHero from "../components/LandingHero";
 import Navbar from "../components/Navbar";
-import FloatingParticles from "@/components/FloatingParticles";
+
 
 const categories = [
   {
@@ -40,7 +40,7 @@ export default function Home() {
 
   return (
     <main className="bg-black text-white">
-      <FloatingParticles />
+      
       <Navbar />
 
       {/* =====================================================
