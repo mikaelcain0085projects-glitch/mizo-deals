@@ -5,6 +5,8 @@ import { createClient } from "../../../lib/supabase-server";
 import AdminDeleteOrderButton from "../../../components/AdminDeleteOrderButton";
 import AdminOrderStatusUpdate from "../../../components/AdminOrderStatusUpdate";
 import AdminPaymentStatusUpdate from "../../../components/AdminPaymentStatusUpdate";
+import AdminDashboardBackButton from "../../../components/AdminDashboardBackButton";
+import AdminOrdersPagination from "../../../components/AdminOrdersPagination";
 
 type Order = {
   order_number: number;
@@ -201,7 +203,19 @@ async function deleteOrder(formData: FormData) {
   revalidatePath("/orders");
 }
 
-export default async function AdminOrdersPage() {
+export default async function AdminOrdersPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const { page: pageParam } = await searchParams;
+
+  const currentPage = Math.max(
+    1,
+    Number.parseInt(pageParam ?? "1", 10) || 1
+  );
+
+  const ORDERS_PER_PAGE = 20;
   const supabase = await createClient();
 
   const {
@@ -226,11 +240,16 @@ export default async function AdminOrdersPage() {
     redirect("/");
   }
 
-  const { data: orders, error: ordersError } = await supabase
+  const {
+  data: orders,
+  error: ordersError,
+  count: totalOrders,
+} = await supabase
     .from("orders")
     .select(
-      `
+  `
         id,
+        order_number,
         user_id,
         status,
         total,
@@ -242,14 +261,27 @@ export default async function AdminOrdersPage() {
         updated_at,
         payment_method
       `
+      ,
+    { count: "exact" }
     )
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+.range(
+  (currentPage - 1) * ORDERS_PER_PAGE,
+  currentPage * ORDERS_PER_PAGE - 1
+);
 
   if (ordersError) {
     console.error("Error loading orders:", ordersError);
   }
 
   const orderList = (orders ?? []) as Order[];
+  const totalPages = Math.max(
+  1,
+  Math.ceil((totalOrders ?? 0) / ORDERS_PER_PAGE)
+);
+if (currentPage > totalPages) {
+  redirect(`/admin/orders?page=${totalPages}`);
+}
 
   const orderIds = orderList.map((order) => order.id);
 
@@ -374,12 +406,7 @@ export default async function AdminOrdersPage() {
             </h1>
           </div>
 
-          <Link
-            href="/admin"
-            className="rounded-full border border-white/20 px-5 py-2.5 text-xs text-orange-500 tracking-[0.15em] transition hover:bg-white/70 hover:text-black"
-          >
-            ADMIN DASHBOARD
-          </Link>
+          <AdminDashboardBackButton />
         </div>
       </header>
 
@@ -438,6 +465,7 @@ export default async function AdminOrdersPage() {
                           {formatDate(order.created_at)}
                         </p>
                       </div>
+                     
 
                       <div className="flex flex-wrap items-center gap-3">
                         <span
@@ -629,6 +657,10 @@ export default async function AdminOrdersPage() {
                 </div>
               );
             })}
+           <AdminOrdersPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+            />
           </div>
         )}
       </section>

@@ -74,7 +74,7 @@ export default function AdminDeleteProductButton({
         type="button"
         onClick={handleDelete}
         disabled={deleting}
-        className="text-xs font-semibold tracking-[0.12em] text-red-400 transition hover:text-red-300 disabled:cursor-not-allowed disabled:opacity-50"
+        className="text-xs font-medium tracking-[0.12em] text-red-400 transition hover:text-red-300 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {deleting ? "DELETING..." : "DELETE"}
       </button>

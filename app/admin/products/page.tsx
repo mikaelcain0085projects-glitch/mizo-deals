@@ -211,7 +211,7 @@ export default async function AdminProductsPage({
           <div>
             <Link
               href="/admin"
-              className="text-xs font-semibold uppercase tracking-[0.2em] text-white/40 transition hover:text-white"
+              className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-500 transition hover:text-white"
             >
               ← Admin Dashboard
             </Link>
@@ -227,7 +227,7 @@ export default async function AdminProductsPage({
 
           <Link
             href="/admin/products/new"
-            className="rounded-full bg-white px-6 py-3 text-xs font-semibold tracking-[0.15em] text-black transition hover:bg-white/90"
+            className="rounded-full bg-orange-600 px-6 py-3 text-xs font-semibold tracking-[0.15em] text-black transition hover:bg-white/90"
           >
             + ADD PRODUCT
           </Link>

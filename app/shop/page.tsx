@@ -267,7 +267,7 @@ export default async function ShopPage({
 <div className="mb-12">
   <Link
     href="/"
-    className="group inline-flex items-center gap-2 text-sm font-normal uppercase tracking-[0.2em] text-orange-500 transition hover:text-orange-300"
+    className="group inline-flex items-center gap-2 text-xs font-normal uppercase tracking-[0.2em] text-orange-500 transition hover:text-orange-300"
   >
     <span className="transition-transform duration-300 group-hover:-translate-x-1">
       ←
