@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createClient } from "../../../lib/supabase-server";
 import AdminDeleteOrderButton from "../../../components/AdminDeleteOrderButton";
+import AdminOrderStatusUpdate from "../../../components/AdminOrderStatusUpdate";
+import AdminPaymentStatusUpdate from "../../../components/AdminPaymentStatusUpdate";
 
 type Order = {
   order_number: number;
@@ -374,7 +376,7 @@ export default async function AdminOrdersPage() {
 
           <Link
             href="/admin"
-            className="rounded-full border border-white/15 px-5 py-2.5 text-xs tracking-[0.15em] transition hover:bg-white hover:text-black"
+            className="rounded-full border border-white/20 px-5 py-2.5 text-xs text-orange-500 tracking-[0.15em] transition hover:bg-white/70 hover:text-black"
           >
             ADMIN DASHBOARD
           </Link>
@@ -494,40 +496,12 @@ export default async function AdminOrdersPage() {
                         Update Order Status
                       </p>
 
-                      <form
-                        action={updateOrderStatus}
-                        className="mt-4 flex flex-col gap-3 sm:flex-row"
-                      >
-                        <input
-                          type="hidden"
-                          name="order_id"
-                          value={order.id}
-                        />
-
-                        <select
-                          name="status"
-                          defaultValue={order.status}
-                          className="rounded-xl border border-white/15 bg-black px-4 py-3 text-sm text-white outline-none transition focus:border-white/40"
-                        >
-                          {ORDER_STATUSES.map((status) => (
-                            <option
-                              key={status}
-                              value={status}
-                              className="bg-black text-white"
-                            >
-                              {status.charAt(0).toUpperCase() +
-                                status.slice(1)}
-                            </option>
-                          ))}
-                        </select>
-
-                        <button
-                          type="submit"
-                          className="rounded-xl bg-white px-5 py-3 text-sm font-semibold tracking-widest text-black transition hover:bg-white/80"
-                        >
-                          UPDATE
-                        </button>
-                      </form>
+                      <AdminOrderStatusUpdate
+  updateOrderStatus={updateOrderStatus}
+  orderId={order.id}
+  currentStatus={order.status}
+  statuses={ORDER_STATUSES}
+/>
                     </div>
 
                     {/* Payment Status */}
@@ -536,40 +510,12 @@ export default async function AdminOrdersPage() {
                         Update Payment Status
                       </p>
 
-                      <form
-                        action={updatePaymentStatus}
-                        className="mt-4 flex flex-col gap-3 sm:flex-row"
-                      >
-                        <input
-                          type="hidden"
-                          name="order_id"
-                          value={order.id}
-                        />
-
-                        <select
-                          name="payment_status"
-                          defaultValue={order.payment_status}
-                          className="rounded-xl border border-white/15 bg-black px-4 py-3 text-sm text-white outline-none transition focus:border-white/40"
-                        >
-                          {PAYMENT_STATUSES.map((status) => (
-                            <option
-                              key={status}
-                              value={status}
-                              className="bg-black text-white"
-                            >
-                              {status.charAt(0).toUpperCase() +
-                                status.slice(1)}
-                            </option>
-                          ))}
-                        </select>
-
-                        <button
-                          type="submit"
-                          className="rounded-xl bg-white px-5 py-3 text-sm font-semibold tracking-widest text-black transition hover:bg-white/80"
-                        >
-                          UPDATE
-                        </button>
-                      </form>
+                     <AdminPaymentStatusUpdate
+  updatePaymentStatus={updatePaymentStatus}
+  orderId={order.id}
+  currentPaymentStatus={order.payment_status}
+  statuses={PAYMENT_STATUSES}
+/>
                     </div>
                   </div>
 
@@ -629,7 +575,7 @@ export default async function AdminOrdersPage() {
 
                   {/* Items */}
                   <div className="p-6 md:p-8">
-                    <p className="text-xs uppercase tracking-[0.2em] text-white/40">
+                    <p className="text-xs uppercase tracking-[0.2em] text-orange-500">
                       Order Items
                     </p>
 
