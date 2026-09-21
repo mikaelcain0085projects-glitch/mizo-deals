@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createClient } from "../../../lib/supabase-server";
+import AdminDeleteOrderButton from "../../../components/AdminDeleteOrderButton";
 
 type Order = {
   order_number: number;
@@ -145,6 +146,52 @@ async function updatePaymentStatus(formData: FormData) {
 
   if (error) {
     console.error("Error updating payment status:", error);
+    return;
+  }
+
+  revalidatePath("/admin/orders");
+  revalidatePath("/orders");
+}
+async function deleteOrder(formData: FormData) {
+  "use server";
+
+  const orderId = String(formData.get("order_id") ?? "");
+
+  if (!orderId) {
+    return;
+  }
+
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/account/login");
+  }
+
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (
+    profileError ||
+    !profile ||
+    profile.role !== "admin"
+  ) {
+    redirect("/");
+  }
+
+  const { error } = await supabase
+    .from("orders")
+    .delete()
+    .eq("id", orderId);
+
+  if (error) {
+    console.error("Error deleting order:", error);
     return;
   }
 
@@ -414,6 +461,11 @@ export default async function AdminOrdersPage() {
                         <span className="text-xl font-semibold">
                           {formatCurrency(order.total)}
                         </span>
+                        <AdminDeleteOrderButton
+  orderId={order.id}
+  orderNumber={order.order_number}
+  deleteOrder={deleteOrder}
+/>
                       </div>
                     </div>
                   </div>
