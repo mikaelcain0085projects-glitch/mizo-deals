@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import AdminProductsBackButton from "../../../../components/AdminProductsBackButton";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { createClient } from "../../../../lib/supabase-browser";
@@ -377,12 +378,7 @@ export default function NewProductPage() {
       {/* Header */}
       <header className="border-b border-white/10 bg-white/[0.03]">
         <div className="mx-auto max-w-5xl px-6 py-6">
-          <Link
-            href="/admin/products"
-            className="text-xs font-semibold uppercase tracking-[0.2em] text-white/40 transition hover:text-white"
-          >
-            ← Products
-          </Link>
+          <AdminProductsBackButton />
 
           <h1 className="mt-4 text-3xl font-semibold tracking-tight">
             Add Product
@@ -547,7 +543,7 @@ export default function NewProductPage() {
                 htmlFor="product-images"
                 className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-white/20 bg-white/[0.03] px-6 py-10 text-center transition hover:border-white/40 hover:bg-white/[0.05]"
               >
-                <span className="text-sm font-medium">
+                <span className="text-sm text-orange-600 font-medium">
                   SELECT PRODUCT IMAGES
                 </span>
 
@@ -556,7 +552,7 @@ export default function NewProductPage() {
                   10 MB each
                 </span>
 
-                <span className="mt-4 rounded-full border border-white/15 px-5 py-2 text-xs font-semibold tracking-[0.12em]">
+                <span className="mt-4 rounded-full border border-white/15 px-5 py-2 text-xs-orange-600 font-semibold tracking-[0.12em]">
                   CHOOSE FILES
                 </span>
 

@@ -2,6 +2,7 @@ import AdminEnquiries from "../../../components/AdminEnquiries";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "../../../lib/supabase-server";
+import AdminDashboardBackButton from "../../../components/AdminDashboardBackButton";
 
 export default async function AdminEnquiriesPage() {
   const supabase = await createClient();
@@ -45,12 +46,7 @@ export default async function AdminEnquiriesPage() {
             </h1>
           </div>
 
-          <Link
-            href="/admin"
-            className="rounded-full border border-white/15 bg-white/[0.04] px-5 py-2.5 text-xs font-semibold tracking-[0.15em] text-white/70 transition hover:border-orange-400/40 hover:bg-white/[0.08] hover:text-white"
-          >
-            ← DASHBOARD
-          </Link>
+          <AdminDashboardBackButton />
         </div>
       </header>
 

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { createClient } from "../../../../../lib/supabase-browser";
+import AdminProductsBackButton from "../../../../../components/AdminProductsBackButton";
 
 const SIZE_OPTIONS = [
   "XS",
@@ -654,12 +655,7 @@ export default function EditProductPage() {
       {/* Header */}
       <header className="border-b border-white/10 bg-white/[0.03]">
         <div className="mx-auto max-w-5xl px-6 py-6">
-          <Link
-            href="/admin/products"
-            className="text-xs font-semibold uppercase tracking-[0.2em] text-white/40 transition hover:text-white"
-          >
-            ← Products
-          </Link>
+          <AdminProductsBackButton />
 
           <h1 className="mt-4 text-3xl font-semibold tracking-tight">
             Edit Product
@@ -837,7 +833,7 @@ export default function EditProductPage() {
                 htmlFor="new-product-images"
                 className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-white/20 bg-white/[0.03] px-6 py-10 text-center transition hover:border-white/40 hover:bg-white/[0.05]"
               >
-                <span className="text-sm font-medium">
+                <span className="text-sm text-orange-500 font-medium">
                   ADD PRODUCT IMAGES
                 </span>
 
@@ -849,7 +845,7 @@ export default function EditProductPage() {
                   Maximum 10 MB each
                 </span>
 
-                <span className="mt-4 rounded-full border border-white/15 px-5 py-2 text-xs font-semibold tracking-[0.12em]">
+                <span className="mt-4 rounded-full border border-white/15 px-5 py-2 text-xs text-orange-500 font-semibold tracking-[0.12em]">
                   CHOOSE FILES
                 </span>
 
@@ -1186,7 +1182,7 @@ export default function EditProductPage() {
             <button
               type="submit"
               disabled={saving}
-              className="rounded-full bg-white px-7 py-3 text-xs font-semibold tracking-[0.15em] text-black transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded-full bg-orange-500 px-7 py-3 text-xs  font-semibold tracking-[0.15em] text-black transition hover:bg-white/80 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {saving
                 ? "UPLOADING & SAVING..."

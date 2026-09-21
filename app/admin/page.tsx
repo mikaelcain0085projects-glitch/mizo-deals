@@ -244,14 +244,14 @@ export default async function AdminPage() {
 
           <Link
             href="/shop"
-            className="rounded-full border border-white/15 px-6 py-3 text-sm tracking-[0.15em] transition hover:bg-white hover:text-black"
+            className="rounded-full border border-white/15 px-6 py-3 text-sm text-green-500 tracking-[0.15em] transition hover:bg-white hover:text-black"
           >
             VIEW SHOP
           </Link>
 
           <Link
             href="/account"
-            className="rounded-full border border-white/15 px-6 py-3 text-sm tracking-[0.15em] transition hover:bg-white hover:text-black"
+            className="rounded-full border border-white/15 px-6 py-3 text-sm text-orange-500 tracking-[0.15em] transition hover:bg-white hover:text-black"
           >
             MY ACCOUNT
           </Link>

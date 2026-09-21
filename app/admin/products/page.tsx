@@ -3,6 +3,9 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "../../../lib/supabase-server";
 import AdminDeleteProductButton from "../../../components/AdminDeleteProductButton";
+import AdminProductCategoryFilter from "../../../components/AdminProductCategoryFilter";
+import AdminDashboardBackButton from "../../../components/AdminDashboardBackButton";
+
 
 
 
@@ -209,13 +212,7 @@ export default async function AdminProductsPage({
       <header className="border-b border-white/10 bg-white/[0.03]">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-5">
           <div>
-            <Link
-              href="/admin"
-              className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-500 transition hover:text-white"
-            >
-              ← Admin Dashboard
-            </Link>
-
+            <AdminDashboardBackButton />
             <h1 className="mt-3 text-3xl font-semibold tracking-tight">
               Products
             </h1>
@@ -249,30 +246,10 @@ export default async function AdminProductsPage({
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-3">
-  {filterCategories.map((filter) => {
-    const isSelected =
-      selectedCategory === filter.slug;
-
-    return (
-      <Link
-        key={filter.slug || "all"}
-        href={
-          filter.slug
-            ? `/admin/products?category=${filter.slug}`
-            : "/admin/products"
-        }
-        className={`rounded-full border px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.12em] transition ${
-          isSelected
-            ? "border-white bg-white text-black"
-            : "border-white/15 text-white/60 hover:border-white/40 hover:text-white"
-        }`}
-      >
-        {filter.name}
-      </Link>
-    );
-  })}
-</div>
+          <AdminProductCategoryFilter
+  filterCategories={filterCategories}
+  selectedCategory={selectedCategory}
+/>
         </div>
 
         {/* FILTER RESULT */}
