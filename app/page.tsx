@@ -448,7 +448,7 @@ to-black/5
       {/* =====================================================
     SIXTH SECTION — BRAND STATEMENT
     ===================================================== */}
-<section className="relative overflow-hidden border-y border-white/10 bg-[#0d0d0d] px-6 py-32 md:px-12 lg:px-20">
+<section className="relative min-h-[600px] overflow-hidden border-y border-white/10 bg-[#0d0d0d] px-6 py-32 md:min-h-[650px] md:px-12 lg:px-20">
 
   {/* Background Image */}
   <Image
