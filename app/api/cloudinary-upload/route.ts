@@ -63,17 +63,17 @@ export async function POST(request: Request) {
     }
 
     // Limit upload size to 10 MB
-    const MAX_FILE_SIZE = 10 * 1024 * 1024;
+    const MAX_FILE_SIZE = 1.5 * 1024 * 1024;
 
-    if (file.size > MAX_FILE_SIZE) {
-      return Response.json(
-        {
-          success: false,
-          message: "Image size must be 10 MB or smaller.",
-        },
-        { status: 400 }
-      );
-    }
+if (file.size > MAX_FILE_SIZE) {
+  return Response.json(
+    {
+      success: false,
+      message: "Image size must be 1.5 MB or smaller.",
+    },
+    { status: 400 }
+  );
+}
 
     // Convert file to buffer
     const bytes = await file.arrayBuffer();

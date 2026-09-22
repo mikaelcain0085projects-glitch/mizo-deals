@@ -5,6 +5,7 @@ import AdminProductsBackButton from "../../../../components/AdminProductsBackBut
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { createClient } from "../../../../lib/supabase-browser";
+import imageCompression from "browser-image-compression";
 
 const SIZE_OPTIONS = ["XS", "S", "M", "L", "XL", "XXL", "XXXL"];
 
@@ -141,38 +142,62 @@ export default function NewProductPage() {
     setCustomColor("");
   }
 
-  function handleImageChange(
-    event: React.ChangeEvent<HTMLInputElement>
-  ) {
-    const files = Array.from(event.target.files ?? []);
+  async function handleImageChange(
+  event: React.ChangeEvent<HTMLInputElement>
+) {
+  const files = Array.from(event.target.files ?? []);
 
-    if (files.length === 0) {
-      return;
-    }
-
-    const invalidFile = files.find(
-      (file) => !file.type.startsWith("image/")
-    );
-
-    if (invalidFile) {
-      setError("Only image files are allowed.");
-      event.target.value = "";
-      return;
-    }
-
-    const oversizedFile = files.find(
-      (file) => file.size > 10 * 1024 * 1024
-    );
-
-    if (oversizedFile) {
-      setError("Each image must be 10 MB or smaller.");
-      event.target.value = "";
-      return;
-    }
-
-    setError("");
-    setImageFiles(files);
+  if (files.length === 0) {
+    return;
   }
+
+  const invalidFile = files.find(
+    (file) => !file.type.startsWith("image/")
+  );
+
+  if (invalidFile) {
+    setError("Only image files are allowed.");
+    event.target.value = "";
+    return;
+  }
+
+  const oversizedFile = files.find(
+    (file) => file.size > 1.5 * 1024 * 1024
+  );
+
+  if (oversizedFile) {
+    setError("Each image must be 1.5 MB or smaller.");
+    event.target.value = "";
+    return;
+  }
+
+  try {
+    setError("");
+
+    const optimizedFiles: File[] = [];
+
+    for (const file of files) {
+      if (file.size <= 800 * 1024) {
+        optimizedFiles.push(file);
+        continue;
+      }
+
+      const compressedFile = await imageCompression(file, {
+        maxSizeMB: 0.8,
+        useWebWorker: true,
+        initialQuality: 0.85,
+      });
+
+      optimizedFiles.push(compressedFile);
+    }
+
+    setImageFiles(optimizedFiles);
+  } catch (error) {
+    console.error("Image compression error:", error);
+    setError("Failed to optimize one or more images.");
+    event.target.value = "";
+  }
+}
 
   async function uploadImages(): Promise<ProductImage[]> {
     const uploadedImages: ProductImage[] = [];
@@ -538,60 +563,66 @@ export default function NewProductPage() {
               uploaded securely to Cloudinary.
             </p>
 
-            <div className="mt-6">
-              <label
-                htmlFor="product-images"
-                className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-white/20 bg-white/[0.03] px-6 py-10 text-center transition hover:border-white/40 hover:bg-white/[0.05]"
-              >
-                <span className="text-sm text-orange-600 font-medium">
-                  SELECT PRODUCT IMAGES
-                </span>
+           <div className="mt-6">
+  <label
+    htmlFor="product-images"
+    className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-white/20 bg-white/[0.03] px-6 py-10 text-center transition hover:border-white/40 hover:bg-white/[0.05]"
+  >
+    <span className="text-sm font-medium text-orange-600">
+      SELECT PRODUCT IMAGES
+    </span>
 
-                <span className="mt-2 text-xs text-white/40">
-                  JPG, PNG, WEBP or other image formats · Maximum
-                  10 MB each
-                </span>
+    <span className="mt-2 text-xs text-white/40">
+      JPG, PNG, WEBP or other image formats · Maximum 1.5 MB each
+    </span>
 
-                <span className="mt-4 rounded-full border border-white/15 px-5 py-2 text-xs-orange-600 font-semibold tracking-[0.12em]">
-                  CHOOSE FILES
-                </span>
+    <span className="mt-4 rounded-full border border-white/15 px-5 py-2 text-xs font-semibold tracking-[0.12em] text-orange-600">
+      CHOOSE FILES
+    </span>
 
-                <input
-                  id="product-images"
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  onChange={handleImageChange}
-                  className="hidden"
-                />
-              </label>
+    <input
+      id="product-images"
+      type="file"
+      accept="image/*"
+      multiple
+      onChange={handleImageChange}
+      className="hidden"
+    />
+  </label>
 
-              {imageFiles.length > 0 && (
-                <div className="mt-5 rounded-xl border border-white/10 bg-white/[0.03] p-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.15em] text-white/40">
-                    Selected Images
-                  </p>
+  {error && (
+    <div className="mt-3 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+      {error}
+    </div>
+  )}
 
-                  <div className="mt-3 space-y-2">
-                    {imageFiles.map((file, index) => (
-                      <div
-                        key={`${file.name}-${index}`}
-                        className="flex items-center justify-between gap-4 rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3"
-                      >
-                        <p className="min-w-0 truncate text-sm text-white/70">
-                          {file.name}
-                        </p>
+  {imageFiles.length > 0 && (
+    <div className="mt-5 rounded-xl border border-white/10 bg-white/[0.03] p-4">
+      <p className="text-xs font-semibold uppercase tracking-[0.15em] text-white/40">
+        Selected Images
+      </p>
 
-                        <p className="shrink-0 text-xs text-white/30">
-                          {(file.size / 1024 / 1024).toFixed(2)} MB
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
+      <div className="mt-3 space-y-2">
+        {imageFiles.map((file, index) => (
+          <div
+            key={`${file.name}-${index}`}
+            className="flex items-center justify-between gap-4 rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3"
+          >
+            <p className="min-w-0 truncate text-sm text-white/70">
+              {file.name}
+            </p>
+
+            <p className="shrink-0 text-xs text-white/30">
+              {(file.size / 1024 / 1024).toFixed(2)} MB
+            </p>
           </div>
+        ))}
+      </div>
+    </div>
+  )}
+</div>
+</div>
+
 
           {/* Pricing & Stock */}
           <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6 md:p-8">
@@ -804,13 +835,7 @@ export default function NewProductPage() {
             </label>
           </div>
 
-          {/* Error */}
-          {error && (
-            <div className="rounded-xl border border-red-400/20 bg-red-400/10 px-5 py-4 text-sm leading-6 text-red-300">
-              {error}
-            </div>
-          )}
-
+          
           {/* Actions */}
           <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
             <Link
