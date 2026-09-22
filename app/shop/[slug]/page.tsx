@@ -103,7 +103,7 @@ export default async function ProductPage({
         {/* BACK TO SHOP */}
         <Link
           href="/shop"
-          className="inline-flex items-center text-sm tracking-widest text-white/50 transition hover:text-white"
+          className="inline-flex items-center text-sm tracking-widest text-orange-500 transition hover:text-white"
         >
           ← BACK TO SHOP
         </Link>
@@ -112,7 +112,7 @@ export default async function ProductPage({
         <div className="mt-10 grid gap-12 lg:grid-cols-2">
 
           {/* PRODUCT IMAGE */}
-          <div className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-white/10">
+          <div className="relative mx-auto w-1/2 aspect-[4/5] overflow-hidden rounded-3xl bg-white/10">
 
             {imageUrl ? (
               <Image
@@ -145,7 +145,7 @@ export default async function ProductPage({
             </p>
 
             {/* NAME */}
-            <h1 className="mt-4 text-4xl font-semibold md:text-6xl">
+            <h1 className="mt-4 text-2xl font-medium md:text-3xl">
               {product.name}
             </h1>
 
@@ -161,7 +161,7 @@ export default async function ProductPage({
 
               {hasSale ? (
                 <>
-                  <span className="text-3xl font-semibold">
+                  <span className="text-2xl font-semibold">
                     ₹{product.sale_price?.toFixed(2)}
                   </span>
 

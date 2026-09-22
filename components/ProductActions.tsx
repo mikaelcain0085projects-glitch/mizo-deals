@@ -274,7 +274,7 @@ const [wishlistLoading, setWishlistLoading] = useState(false);
     }, 150);
   }}
   disabled={viewCartLoading}
-  className="rounded-full bg-white px-5 py-2.5 text-xs font-semibold tracking-[0.12em] text-black transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-70"
+  className="rounded-full bg-orange-500 px-5 py-2.5 text-xs font-semibold tracking-[0.12em] text-black transition hover:bg-white/70 disabled:cursor-not-allowed disabled:opacity-70"
 >
   {viewCartLoading ? (
     <span className="inline-flex items-center gap-2">
@@ -305,7 +305,7 @@ const [wishlistLoading, setWishlistLoading] = useState(false);
           type="button"
           onClick={handleAddToCart}
           disabled={stock <= 0 || loading}
-          className="rounded-full bg-white px-8 py-4 text-sm font-semibold tracking-widest text-black transition hover:bg-white/80 disabled:cursor-not-allowed disabled:opacity-40"
+          className="rounded-full bg-green-600 px-6 py-2 text-sm font-semibold tracking-widest text-black transition hover:bg-white/80 disabled:cursor-not-allowed disabled:opacity-40"
         >
           {loading
             ? "ADDING..."

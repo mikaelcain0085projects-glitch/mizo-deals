@@ -366,14 +366,14 @@ const imageUrl =
 
            <Link
   href="/checkout"
-  className="flex w-full items-center justify-center rounded-full bg-white px-6 py-4 text-sm font-semibold tracking-[0.15em] text-black transition hover:bg-white/90"
+  className="flex w-full items-center justify-center rounded-full bg-green-600 px-6 py-4 text-sm font-semibold tracking-[0.15em] text-black transition hover:bg-white/90"
 >
   PROCEED TO CHECKOUT
 </Link>
 
             <Link
               href="/shop"
-              className="mt-4 block text-center text-sm text-white/50 transition hover:text-white"
+              className="mt-4 block text-center text-sm text-orange-600 transition hover:text-white"
             >
               ← Continue Shopping
             </Link>

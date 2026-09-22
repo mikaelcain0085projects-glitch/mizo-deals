@@ -619,7 +619,7 @@ export default async function ShopPage({
   {/* STOCK */}
   <p
     className={`mt-2 text-[11px] tracking-wide ${
-      product.stock > 0 ? "text-white/30" : "text-white/50"
+     product.stock > 0 ? "text-orange-400" : "text-white/50"
     }`}
   >
     {product.stock > 0
