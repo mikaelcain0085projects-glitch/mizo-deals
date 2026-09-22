@@ -446,17 +446,31 @@ to-black/5
   </div>
 </section>
       {/* =====================================================
-          SIXTH SECTION — BRAND STATEMENT
-          ===================================================== */}
-      <section className="relative overflow-hidden border-y border-white/10 bg-[#0d0d0d] px-6 py-32 md:px-12 lg:px-20">
-  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_75%_50%,rgba(180,83,9,0.16),transparent_45%)]" />
-        <div className="mx-auto max-w-5xl text-center">
+    SIXTH SECTION — BRAND STATEMENT
+    ===================================================== */}
+<section className="relative overflow-hidden border-y border-white/10 bg-[#0d0d0d] px-6 py-32 md:px-12 lg:px-20">
 
-          <p className="text-xs font-semibold uppercase tracking-[0.4em] text-white/30">
+  {/* Background Image */}
+  <Image
+    src="/media/models4.png"
+    alt="MIZO DEALS fashion"
+    fill
+    sizes="100vw"
+    className="object-cover"
+  />
+
+  {/* Dark cinematic overlay */}
+  <div className="absolute inset-0 bg-black/55" />
+
+  {/* Existing orange ambient glow */}
+  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_75%_50%,rgba(180,83,9,0.16),transparent_45%)]" />
+
+  <div className="relative z-10 mx-auto max-w-5xl text-center">
+          <p className="text-xl font-semibold uppercase tracking-[0.4em] text-white/30">
             MIZO DEALS
           </p>
 
-          <blockquote className="mt-8 text-4xl font-medium leading-[1.05] tracking-[-0.04em] md:text-6xl lg:text-7xl">
+          <blockquote className="mt-8 text-4xl font-medium leading-[1.05] tracking-[-0.04em] md:text-4xl lg:text-7xl">
             “Good outfits brighten days.
             <br />
             Great style becomes part of your story.”
@@ -464,7 +478,7 @@ to-black/5
 
           <div className="mx-auto mt-10 h-px w-12 bg-white/30" />
 
-          <p className="mt-7 text-xs uppercase tracking-[0.3em] text-white/40">
+          <p className="mt-7 text-xl text-green-500 uppercase tracking-[0.3em] ">
             Clothes · People · Stories
           </p>
 

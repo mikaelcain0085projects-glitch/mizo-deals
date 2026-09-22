@@ -9,8 +9,8 @@ const HERO_IMAGES = [
   "/media/models1.png",
   "/media/models2.png",
   "/media/models3.png",
+  "/media/models4.png",
 ];
-
 export default function LandingHero() {
   const [activeSlide, setActiveSlide] = useState(0);
 
