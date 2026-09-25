@@ -1,13 +1,16 @@
 import Image from "next/image";
 import ShopNavLink from "../../components/ShopNavLink";
 import Link from "next/link";
+import ShopPagination from "../../components/ShopPagination";
 import { supabase } from "../../lib/supabase";
+import ShopAddToCart from "../../components/ShopAddToCart";
 
 export const revalidate = 60;
 
 type ShopPageProps = {
   searchParams: Promise<{
     category?: string;
+    page?: string;
   }>;
 };
 
@@ -44,7 +47,16 @@ export default async function ShopPage({
   searchParams,
 }: ShopPageProps) {
   const params = await searchParams;
-  const selectedCategory = params.category?.toLowerCase() ?? "";
+ const selectedCategory = params.category?.toLowerCase() ?? "";
+
+const currentPage = Math.max(
+  1,
+  Number.parseInt(params.page ?? "1", 10) || 1
+);
+
+const PRODUCTS_PER_PAGE = 12;
+const from = (currentPage - 1) * PRODUCTS_PER_PAGE;
+const to = from + PRODUCTS_PER_PAGE - 1;
 
   // Get active categories
   console.time("SHOP: categories query");
@@ -153,8 +165,10 @@ export default async function ShopPage({
     sale_price,
     category_id,
     images,
-    stock
-  `)
+    stock,
+    sizes,
+    colors
+  `, { count: "exact" })
   .eq("is_active", true)
   .order("created_at", { ascending: false });
 
@@ -176,9 +190,15 @@ export default async function ShopPage({
   console.time("SHOP: products query");
 
   const {
-    data: products,
-    error: productsError,
-  } = await productQuery;
+  data: products,
+  error: productsError,
+  count: productCount,
+} = await productQuery.range(from, to);
+const totalProducts = productCount ?? 0;
+const totalPages = Math.max(
+  1,
+  Math.ceil(totalProducts / PRODUCTS_PER_PAGE)
+);
   console.timeEnd("SHOP: products query");
 
   // Handle database errors
@@ -266,14 +286,46 @@ export default async function ShopPage({
        {/* SHOP HEADER */}
 <div className="mb-12">
   <Link
-    href="/"
-    className="group inline-flex items-center gap-2 text-xs font-normal uppercase tracking-[0.2em] text-orange-500 transition hover:text-orange-300"
-  >
-    <span className="transition-transform duration-300 group-hover:-translate-x-1">
-      ←
-    </span>
-    Back to Home
-  </Link>
+  href="/"
+  className="
+    group relative inline-flex items-center gap-3
+    overflow-hidden
+    rounded-full
+    border border-white/15
+    bg-white/[0.045]
+    px-5 py-3
+    text-xs font-semibold uppercase
+    tracking-[0.16em]
+    text-white/70
+    shadow-[0_8px_30px_rgba(0,0,0,0.25)]
+    backdrop-blur-xl
+    transition-all duration-300
+    hover:-translate-y-0.5
+    hover:border-orange-500/40
+    hover:bg-white/[0.08]
+    hover:text-orange-400
+    hover:shadow-[0_12px_35px_rgba(249,115,22,0.12)]
+  "
+>
+  {/* GLASS HIGHLIGHT */}
+  <span
+    className="
+      pointer-events-none absolute inset-x-8 top-0 h-px
+      bg-gradient-to-r
+      from-transparent
+      via-white/40
+      to-transparent
+    "
+  />
+
+  <span className="relative transition-transform duration-300 group-hover:-translate-x-1">
+    ←
+  </span>
+
+  <span className="relative">
+    BACK TO HOME
+  </span>
+</Link>
 
   <div className="mt-10">
     <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-white/35">
@@ -302,16 +354,16 @@ export default async function ShopPage({
 </span>
 
     {/* ALL */}
-    <Link
-      href="/shop"
-      className={`group relative rounded-full border px-5 py-2.5 text-[11px] font-semibold uppercase tracking-[0.14em] transition-all duration-300 ${
-  !selectedCategory
-    ? "border-orange-400 bg-orange-500 text-black shadow-[0_6px_25px_rgba(249,115,22,0.25)]"
-    : "shimmer-hover border-white/10 bg-white/[0.025] text-white/45 hover:-translate-y-0.5 hover:border-orange-400/40 hover:bg-white/[0.06] hover:text-white hover:shadow-[0_10px_28px_rgba(249,115,22,0.14)]"
-}`}
-    >
-      All
-    </Link>
+<ShopNavLink
+  href="/shop"
+  className={`group relative rounded-full border px-5 py-2.5 text-[11px] font-semibold uppercase tracking-[0.14em] transition-all duration-300 ${
+    !selectedCategory
+      ? "border-orange-400 bg-orange-500 text-black shadow-[0_6px_25px_rgba(249,115,22,0.25)]"
+      : "shimmer-hover border-white/10 bg-white/[0.025] text-white/45 hover:-translate-y-0.5 hover:border-orange-400/40 hover:bg-white/[0.06] hover:text-white hover:shadow-[0_10px_28px_rgba(249,115,22,0.14)]"
+  }`}
+>
+  All
+</ShopNavLink>
 
     {/* MEN */}
     <ShopNavLink
@@ -494,10 +546,9 @@ export default async function ShopPage({
                 "Uncategorized";
 
               return (
-                <Link
+               <div
   key={product.id}
-  href={`/shop/${product.slug}`}
-  className="group relative block overflow-hidden rounded-[28px] border border-white/15 bg-white/[0.055] shadow-[0_8px_40px_rgba(255,255,255,0.04)] backdrop-blur-xl transition-all duration-500 hover:-translate-y-1 hover:border-white/30 hover:bg-white/[0.08] hover:shadow-[0_16px_50px_rgba(255,255,255,0.08)]"
+  className="group relative overflow-visible rounded-[28px] border border-white/15 bg-white/[0.055] shadow-[0_8px_40px_rgba(255,255,255,0.04)] backdrop-blur-xl transition-all duration-500 hover:-translate-y-1 hover:border-white/30 hover:bg-white/[0.08] hover:shadow-[0_16px_50px_rgba(255,255,255,0.08)]"
 >
   {/* LIQUID GLASS HIGHLIGHT */}
   <div className="pointer-events-none absolute inset-0 z-10 rounded-[28px] bg-gradient-to-br from-white/[0.10] via-transparent to-white/[0.02] opacity-70" />
@@ -505,8 +556,13 @@ export default async function ShopPage({
   {/* TOP GLASS REFLECTION */}
   <div className="pointer-events-none absolute left-8 right-8 top-0 z-20 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
 
+                  
                   {/* PRODUCT IMAGE */}
-                  <div className="relative aspect-[4/5] overflow-hidden bg-white/[0.035]">
+<Link
+  href={`/shop/${product.slug}`}
+  className="block"
+>
+  <div className="relative aspect-[4/5] overflow-hidden bg-white/[0.035]">
   <div
     aria-hidden="true"
     className="
@@ -550,6 +606,7 @@ export default async function ShopPage({
                     )}
 
                   </div>
+                  </Link>
 
                   {/* PRODUCT INFORMATION */}
                 <div
@@ -626,8 +683,15 @@ export default async function ShopPage({
       ? `${product.stock} in stock`
       : "Out of stock"}
   </p>
+  <ShopAddToCart
+  productId={product.id}
+  productName={product.name}
+  stock={product.stock}
+  sizes={Array.isArray(product.sizes) ? product.sizes : []}
+  colors={Array.isArray(product.colors) ? product.colors : []}
+/>
 </div>
-                </Link>
+        </div>        
               );
             })}
 
@@ -653,7 +717,13 @@ export default async function ShopPage({
             </Link>
 
           </div>
-        )}
+                )}
+
+        <ShopPagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          category={selectedCategory}
+        />
 
       </div>
     </main>

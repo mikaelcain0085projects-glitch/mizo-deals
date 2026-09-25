@@ -111,31 +111,65 @@ export default async function ProductPage({
         {/* PRODUCT */}
         <div className="mt-10 grid gap-12 lg:grid-cols-2">
 
-          {/* PRODUCT IMAGE */}
-          <div className="relative mx-auto w-1/2 aspect-[4/5] overflow-hidden rounded-3xl bg-white/10">
+          {/* PRODUCT IMAGES */}
+<div className="grid grid-cols-2 gap-4">
 
-            {imageUrl ? (
-              <Image
-                src={imageUrl}
-                alt={product.name}
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
-            ) : (
-              <div className="flex h-full items-center justify-center text-white/30">
-                No image
-              </div>
-            )}
+  {/* FRONT IMAGE */}
+  <div className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-white/10">
 
-            {/* SALE BADGE */}
-            {hasSale && (
-              <span className="absolute left-6 top-6 rounded-full bg-white px-4 py-2 text-sm font-semibold text-black">
-                SALE
-              </span>
-            )}
-          </div>
+    {imageUrl ? (
+      <Image
+        src={imageUrl}
+        alt={`${product.name} front`}
+        fill
+        className="object-cover"
+        sizes="(max-width: 1024px) 50vw, 25vw"
+      />
+    ) : (
+      <div className="flex h-full items-center justify-center text-white/30">
+        No image
+      </div>
+    )}
 
+    <span className="absolute bottom-4 left-4 rounded-full bg-black/70 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-white">
+      Front
+    </span>
+
+    {/* SALE BADGE */}
+    {hasSale && (
+      <span className="absolute left-4 top-4 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-black">
+        SALE
+      </span>
+    )}
+  </div>
+
+  {/* BACK IMAGE */}
+  <div className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-white/10">
+
+    {images[1] ? (
+      <Image
+        src={
+          typeof images[1] === "string"
+            ? images[1]
+            : images[1].url ?? ""
+        }
+        alt={`${product.name} back`}
+        fill
+        className="object-cover"
+        sizes="(max-width: 1024px) 50vw, 25vw"
+      />
+    ) : (
+      <div className="flex h-full items-center justify-center text-white/30">
+        No back image
+      </div>
+    )}
+
+    <span className="absolute bottom-4 left-4 rounded-full bg-black/70 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-white">
+      Back
+    </span>
+  </div>
+
+</div>
           {/* PRODUCT INFORMATION */}
           <div className="flex flex-col justify-center">
 

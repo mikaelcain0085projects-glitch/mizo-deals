@@ -2,9 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+const [cartLoading, setCartLoading] = useState(false);
+
+const router = useRouter();
 
   const closeMenu = () => setMenuOpen(false);
 
@@ -101,16 +105,35 @@ export default function Navbar() {
 
           {/* CART */}
           <Link
-            href="/cart"
-            aria-label="Shopping cart"
-            className="
-              flex h-9 w-9 items-center justify-center
-              rounded-full text-base text-white/70
-              transition-all duration-300
-              hover:scale-105 hover:bg-white/10 hover:text-white
-            "
-          >
-            🛒
+  href="/cart"
+  aria-label="Shopping cart"
+  onClick={(event) => {
+  event.preventDefault();
+
+  if (cartLoading) {
+    return;
+  }
+
+  setCartLoading(true);
+  router.push("/cart");
+}}
+  className="
+    flex h-9 w-9 items-center justify-center
+    rounded-full text-base text-white/70
+    transition-all duration-300
+    hover:scale-105 hover:bg-white/10 hover:text-white
+  "
+>
+  {cartLoading ? (
+    <span
+      className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/30 border-t-white"
+      aria-label="Loading cart"
+    />
+  ) : (
+    "🛒"
+  )}
+
+          
           </Link>
 
           {/* DESKTOP ACCOUNT */}

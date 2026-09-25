@@ -55,7 +55,8 @@ export default function NewProductPage() {
   const [customSize, setCustomSize] = useState("");
   const [customColor, setCustomColor] = useState("");
 
-  const [imageFiles, setImageFiles] = useState<File[]>([]);
+ const [frontImage, setFrontImage] = useState<File | null>(null);
+const [backImage, setBackImage] = useState<File | null>(null);
 
   const [isActive, setIsActive] = useState(true);
   const [loadingCategories, setLoadingCategories] = useState(true);
@@ -143,29 +144,22 @@ export default function NewProductPage() {
   }
 
   async function handleImageChange(
-  event: React.ChangeEvent<HTMLInputElement>
+  event: React.ChangeEvent<HTMLInputElement>,
+  side: "front" | "back"
 ) {
-  const files = Array.from(event.target.files ?? []);
+  const file = event.target.files?.[0];
 
-  if (files.length === 0) {
+  if (!file) {
     return;
   }
 
-  const invalidFile = files.find(
-    (file) => !file.type.startsWith("image/")
-  );
-
-  if (invalidFile) {
+  if (!file.type.startsWith("image/")) {
     setError("Only image files are allowed.");
     event.target.value = "";
     return;
   }
 
-  const oversizedFile = files.find(
-    (file) => file.size > 1.5 * 1024 * 1024
-  );
-
-  if (oversizedFile) {
+  if (file.size > 1.5 * 1024 * 1024) {
     setError("Each image must be 1.5 MB or smaller.");
     event.target.value = "";
     return;
@@ -174,60 +168,61 @@ export default function NewProductPage() {
   try {
     setError("");
 
-    const optimizedFiles: File[] = [];
+    let optimizedFile = file;
 
-    for (const file of files) {
-      if (file.size <= 800 * 1024) {
-        optimizedFiles.push(file);
-        continue;
-      }
-
-      const compressedFile = await imageCompression(file, {
+    if (file.size > 800 * 1024) {
+      optimizedFile = await imageCompression(file, {
         maxSizeMB: 0.8,
         useWebWorker: true,
         initialQuality: 0.85,
       });
-
-      optimizedFiles.push(compressedFile);
     }
 
-    setImageFiles(optimizedFiles);
+    if (side === "front") {
+      setFrontImage(optimizedFile);
+    } else {
+      setBackImage(optimizedFile);
+    }
   } catch (error) {
     console.error("Image compression error:", error);
-    setError("Failed to optimize one or more images.");
+    setError("Failed to optimize the image.");
     event.target.value = "";
   }
 }
-
   async function uploadImages(): Promise<ProductImage[]> {
-    const uploadedImages: ProductImage[] = [];
-
-    for (const file of imageFiles) {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const response = await fetch("/api/cloudinary-upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      const result = await response.json();
-
-      if (!response.ok || !result.success) {
-        throw new Error(
-          result.message || `Failed to upload ${file.name}.`
-        );
-      }
-
-      uploadedImages.push({
-        url: result.url,
-        publicId: result.publicId,
-      });
-    }
-
-    return uploadedImages;
+  if (!frontImage || !backImage) {
+    throw new Error("Please select both front and back images.");
   }
 
+  const uploadedImages: ProductImage[] = [];
+
+  const imagesToUpload = [frontImage, backImage];
+
+  for (const file of imagesToUpload) {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await fetch("/api/cloudinary-upload", {
+      method: "POST",
+      body: formData,
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(
+        result.message || `Failed to upload ${file.name}.`
+      );
+    }
+
+    uploadedImages.push({
+      url: result.url,
+      publicId: result.publicId,
+    });
+  }
+
+  return uploadedImages;
+}
   async function deleteUploadedImages(images: ProductImage[]) {
     for (const image of images) {
       try {
@@ -338,10 +333,10 @@ export default function NewProductPage() {
     let uploadedImages: ProductImage[] = [];
 
     try {
-      // Upload selected images to Cloudinary
-      if (imageFiles.length > 0) {
-        uploadedImages = await uploadImages();
-      }
+      // Upload front and back images to Cloudinary
+if (frontImage && backImage) {
+  uploadedImages = await uploadImages();
+}
 
       // Create product in Supabase
       const { error: insertError } = await supabase
@@ -563,64 +558,91 @@ export default function NewProductPage() {
               uploaded securely to Cloudinary.
             </p>
 
-           <div className="mt-6">
-  <label
-    htmlFor="product-images"
-    className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-white/20 bg-white/[0.03] px-6 py-10 text-center transition hover:border-white/40 hover:bg-white/[0.05]"
-  >
-    <span className="text-sm font-medium text-orange-600">
-      SELECT PRODUCT IMAGES
-    </span>
+           <div className="mt-6 grid gap-5 md:grid-cols-2">
+  {/* FRONT IMAGE */}
+  <div>
+    <label
+      htmlFor="front-image"
+      className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-white/20 bg-white/[0.03] px-6 py-10 text-center transition hover:border-white/40 hover:bg-white/[0.05]"
+    >
+      <span className="text-sm font-medium text-orange-600">
+        FRONT IMAGE
+      </span>
 
-    <span className="mt-2 text-xs text-white/40">
-      JPG, PNG, WEBP or other image formats · Maximum 1.5 MB each
-    </span>
+      <span className="mt-2 text-xs text-white/40">
+        JPG, PNG, WEBP · Maximum 1.5 MB
+      </span>
 
-    <span className="mt-4 rounded-full border border-white/15 px-5 py-2 text-xs font-semibold tracking-[0.12em] text-orange-600">
-      CHOOSE FILES
-    </span>
+      <span className="mt-4 rounded-full border border-white/15 px-5 py-2 text-xs font-semibold tracking-[0.12em] text-orange-600">
+        {frontImage ? "CHANGE FRONT IMAGE" : "CHOOSE FRONT IMAGE"}
+      </span>
 
-    <input
-      id="product-images"
-      type="file"
-      accept="image/*"
-      multiple
-      onChange={handleImageChange}
-      className="hidden"
-    />
-  </label>
+      <input
+        id="front-image"
+        type="file"
+        accept="image/*"
+        onChange={(event) => handleImageChange(event, "front")}
+        className="hidden"
+      />
+    </label>
 
-  {error && (
-    <div className="mt-3 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
-      {error}
-    </div>
-  )}
-
-  {imageFiles.length > 0 && (
-    <div className="mt-5 rounded-xl border border-white/10 bg-white/[0.03] p-4">
-      <p className="text-xs font-semibold uppercase tracking-[0.15em] text-white/40">
-        Selected Images
-      </p>
-
-      <div className="mt-3 space-y-2">
-        {imageFiles.map((file, index) => (
-          <div
-            key={`${file.name}-${index}`}
-            className="flex items-center justify-between gap-4 rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3"
-          >
-            <p className="min-w-0 truncate text-sm text-white/70">
-              {file.name}
-            </p>
-
-            <p className="shrink-0 text-xs text-white/30">
-              {(file.size / 1024 / 1024).toFixed(2)} MB
-            </p>
-          </div>
-        ))}
+    {frontImage && (
+      <div className="mt-3 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">
+        <p className="truncate text-sm text-white/70">
+          {frontImage.name}
+        </p>
+        <p className="mt-1 text-xs text-white/30">
+          {(frontImage.size / 1024 / 1024).toFixed(2)} MB
+        </p>
       </div>
-    </div>
-  )}
+    )}
+  </div>
+
+  {/* BACK IMAGE */}
+  <div>
+    <label
+      htmlFor="back-image"
+      className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-white/20 bg-white/[0.03] px-6 py-10 text-center transition hover:border-white/40 hover:bg-white/[0.05]"
+    >
+      <span className="text-sm font-medium text-orange-600">
+        BACK IMAGE
+      </span>
+
+      <span className="mt-2 text-xs text-white/40">
+        JPG, PNG, WEBP · Maximum 1.5 MB
+      </span>
+
+      <span className="mt-4 rounded-full border border-white/15 px-5 py-2 text-xs font-semibold tracking-[0.12em] text-orange-600">
+        {backImage ? "CHANGE BACK IMAGE" : "CHOOSE BACK IMAGE"}
+      </span>
+
+      <input
+        id="back-image"
+        type="file"
+        accept="image/*"
+        onChange={(event) => handleImageChange(event, "back")}
+        className="hidden"
+      />
+    </label>
+
+    {backImage && (
+      <div className="mt-3 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">
+        <p className="truncate text-sm text-white/70">
+          {backImage.name}
+        </p>
+        <p className="mt-1 text-xs text-white/30">
+          {(backImage.size / 1024 / 1024).toFixed(2)} MB
+        </p>
+      </div>
+    )}
+  </div>
 </div>
+
+{error && (
+  <div className="mt-3 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+    {error}
+  </div>
+)}
 </div>
 
 
