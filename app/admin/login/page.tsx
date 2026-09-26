@@ -202,7 +202,7 @@ export default function AdminLoginPage() {
               "CONNECTING TO GOOGLE..."
             ) : (
               <>
-                <span className="text-lg font-bold">G</span>
+                <span className="text-lg text-orange-600 font-bold">G</span>
                 CONTINUE WITH GOOGLE
               </>
             )}
@@ -212,7 +212,7 @@ export default function AdminLoginPage() {
         <div className="mt-6 text-center">
           <Link
             href="/account/login"
-            className="text-sm text-white/50 transition hover:text-white"
+            className="text-sm text-orange-600 transition hover:text-white"
           >
             ← Back to customer login
           </Link>

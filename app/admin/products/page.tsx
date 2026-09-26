@@ -5,6 +5,7 @@ import { createClient } from "../../../lib/supabase-server";
 import AdminDeleteProductButton from "../../../components/AdminDeleteProductButton";
 import AdminProductCategoryFilter from "../../../components/AdminProductCategoryFilter";
 import AdminDashboardBackButton from "../../../components/AdminDashboardBackButton";
+import AdminProductsPagination from "../../../components/AdminProductsPagination";
 
 
 
@@ -42,6 +43,7 @@ const filterCategories = [
 type AdminProductsPageProps = {
   searchParams: Promise<{
     category?: string;
+    page?: string;
   }>;
 };
 
@@ -72,7 +74,14 @@ export default async function AdminProductsPage({
 
   // Read selected filter
   const params = await searchParams;
-  const selectedCategory = params.category?.toLowerCase() ?? "";
+const selectedCategory = params.category?.toLowerCase() ?? "";
+
+const currentPage = Math.max(
+  1,
+  Number.parseInt(params.page ?? "1", 10) || 1
+);
+
+const PRODUCTS_PER_PAGE = 12;
 
   // Load categories
   const { data: categories, error: categoriesError } = await supabase
@@ -192,13 +201,30 @@ export default async function AdminProductsPage({
     ) ?? null;
 
   const filteredProducts =
-    selectedCategory && parentCategory
-      ? productList.filter(
-          (product) =>
-            getParentCategory(product.category_id)?.id ===
-            parentCategory.id
-        )
-      : productList;
+  selectedCategory && parentCategory
+    ? productList.filter(
+        (product) =>
+          getParentCategory(product.category_id)?.id ===
+          parentCategory.id
+      )
+    : productList;
+
+const totalProducts = filteredProducts.length;
+
+const totalPages = Math.max(
+  1,
+  Math.ceil(totalProducts / PRODUCTS_PER_PAGE)
+);
+
+const safeCurrentPage = Math.min(
+  currentPage,
+  totalPages
+);
+
+const from = (safeCurrentPage - 1) * PRODUCTS_PER_PAGE;
+const to = from + PRODUCTS_PER_PAGE;
+
+const paginatedProducts = filteredProducts.slice(from, to);
 
   // ---------------------------------------------------------
   // FILTER BUTTONS
@@ -324,7 +350,7 @@ export default async function AdminProductsPage({
                 </thead>
 
                 <tbody>
-                  {filteredProducts.map((product) => {
+                  {paginatedProducts.map((product) => {
                     const sizes = Array.isArray(product.sizes)
                       ? product.sizes.map(String)
                       : [];
@@ -505,7 +531,7 @@ export default async function AdminProductsPage({
 
             {/* Mobile cards */}
             <div className="divide-y divide-white/10 md:hidden">
-              {filteredProducts.map((product) => {
+              {paginatedProducts.map((product) => {
                 const sizes = Array.isArray(product.sizes)
                   ? product.sizes.map(String)
                   : [];
@@ -669,8 +695,14 @@ export default async function AdminProductsPage({
                 );
               })}
             </div>
-          </div>
+                    </div>
         )}
+
+        <AdminProductsPagination
+          currentPage={safeCurrentPage}
+          totalPages={totalPages}
+          category={selectedCategory}
+        />
       </section>
     </main>
   );

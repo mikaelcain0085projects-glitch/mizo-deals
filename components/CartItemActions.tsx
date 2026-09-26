@@ -93,13 +93,20 @@ export default function CartItemActions({
         </div>
 
         <button
-          type="button"
-          onClick={removeItem}
-          disabled={loading}
-          className="rounded-full border border-red-500/30 px-4 py-2 text-xs tracking-widest text-red-300 transition hover:border-red-400 hover:text-red-200 disabled:opacity-40"
-        >
-          REMOVE
-        </button>
+  type="button"
+  onClick={removeItem}
+  disabled={loading}
+  className="flex min-w-[88px] items-center justify-center gap-2 rounded-full border border-red-500/30 px-4 py-2 text-xs tracking-widest text-red-300 transition hover:border-red-400 hover:text-red-200 disabled:cursor-not-allowed disabled:opacity-40"
+>
+  {loading ? (
+    <span
+      className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-red-300/30 border-t-red-300"
+      aria-label="Removing"
+    />
+  ) : (
+    "REMOVE"
+  )}
+</button>
       </div>
 
       {error && (

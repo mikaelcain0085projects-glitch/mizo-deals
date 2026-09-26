@@ -12,7 +12,8 @@ export default function AccountPage() {
   const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(true);
-
+  const [cartLoading, setCartLoading] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
   useEffect(() => {
     async function loadAccount() {
       const {
@@ -33,11 +34,12 @@ export default function AccountPage() {
   }, [router, supabase]);
 
   async function handleLogout() {
-    await supabase.auth.signOut();
-    router.push("/");
-    router.refresh();
-  }
+  setLoggingOut(true);
 
+  await supabase.auth.signOut();
+  router.push("/");
+  router.refresh();
+}
   if (loading) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-black text-white">
@@ -116,39 +118,70 @@ export default function AccountPage() {
             </p>
 
             <div className="mt-6 space-y-3">
-              <button
-                type="button"
-                onClick={() => router.push("/shop")}
-                className="w-full rounded-full bg-white px-6 py-3 text-sm font-semibold tracking-widest text-black transition hover:bg-white/80"
-              >
-                CONTINUE SHOPPING
-              </button>
+  <button
+    type="button"
+    onClick={() => router.push("/shop")}
+    className="w-full rounded-full bg-white px-6 py-3 text-sm font-semibold tracking-widest text-black transition hover:bg-white/80"
+  >
+    CONTINUE SHOPPING
+  </button>
 
-              <Link
-                href="/orders"
-                className="block w-full rounded-full border border-white/20 px-6 py-3 text-center text-sm tracking-widest transition hover:border-white hover:bg-white hover:text-black"
-              >
-                MY ORDERS
-              </Link>
+  <button
+    type="button"
+    disabled={cartLoading}
+    onClick={() => {
+      if (cartLoading) {
+        return;
+      }
 
-              <Link
-                href="/wishlist"
-                className="block w-full rounded-full border border-white/20 px-6 py-3 text-center text-sm tracking-widest transition hover:border-white hover:bg-white hover:text-black"
-              >
-                WISHLIST
-              </Link>
-            </div>
+      setCartLoading(true);
+      router.push("/cart");
+    }}
+    className="flex w-full items-center justify-center gap-2 rounded-full border border-white/20 px-6 py-3 text-sm tracking-widest transition hover:border-white hover:bg-white hover:text-black disabled:cursor-not-allowed disabled:opacity-60"
+  >
+    {cartLoading ? (
+      <span
+        className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/30 border-t-white"
+        aria-label="Loading cart"
+      />
+    ) : (
+      "MY CART"
+    )}
+  </button>
+
+  <Link
+    href="/orders"
+    className="block w-full rounded-full border border-white/20 px-6 py-3 text-center text-sm tracking-widest transition hover:border-white hover:bg-white hover:text-black"
+  >
+    MY ORDERS
+  </Link>
+
+  <Link
+    href="/wishlist"
+    className="block w-full rounded-full border border-white/20 px-6 py-3 text-center text-sm tracking-widest transition hover:border-white hover:bg-white hover:text-black"
+  >
+    WISHLIST
+  </Link>
+</div>
           </div>
         </div>
 
         <div className="mt-8">
           <button
-            type="button"
-            onClick={handleLogout}
-            className="rounded-full border border-red-500/30 px-6 py-3 text-sm tracking-widest text-red-300 transition hover:border-red-400 hover:text-red-200"
-          >
-            LOG OUT
-          </button>
+  type="button"
+  onClick={handleLogout}
+  disabled={loggingOut}
+  className="flex min-w-[104px] items-center justify-center gap-2 rounded-full border border-red-500/30 px-6 py-3 text-sm tracking-widest text-red-300 transition hover:border-red-400 hover:text-red-200 disabled:cursor-not-allowed disabled:opacity-60"
+>
+  {loggingOut ? (
+    <span
+      className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-red-300/30 border-t-red-300"
+      aria-label="Logging out"
+    />
+  ) : (
+    "LOG OUT"
+  )}
+</button>
         </div>
       </div>
     </main>

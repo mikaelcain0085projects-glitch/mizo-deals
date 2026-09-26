@@ -359,24 +359,65 @@ const imageUrl =
 
             <div className="my-6 border-t border-white/10" />
 
-            <div className="flex items-center justify-between text-lg font-semibold">
+            <div className="flex items-center justify-between space-y-3  text-lg font-semibold">
               <span>Total</span>
               <span>₹{subtotal.toFixed(2)}</span>
             </div>
+            
 
            <Link
   href="/checkout"
-  className="flex w-full items-center justify-center rounded-full bg-green-600 px-6 py-4 text-sm font-semibold tracking-[0.15em] text-black transition hover:bg-white/90"
+  className="flex w-full items-center justify-center rounded-full bg-green-600 px-6 py-3 text-sm font-normal tracking-[0.15em] text-black transition hover:bg-white/70"
 >
   PROCEED TO CHECKOUT
 </Link>
 
+ <div className="mt-5 flex justify-center">
+
+
             <Link
-              href="/shop"
-              className="mt-4 block text-center text-sm text-orange-600 transition hover:text-white"
-            >
-              ← Continue Shopping
-            </Link>
+  href="/shop"
+  className="
+    group relative inline-flex items-center gap-3
+    overflow-hidden
+    rounded-full
+    border border-white/15
+    bg-white/[0.045]
+    px-5 py-3
+    text-xs font-semibold uppercase
+    tracking-[0.16em]
+    text-white/70
+    shadow-[0_8px_30px_rgba(0,0,0,0.25)]
+    backdrop-blur-xl
+    transition-all duration-300
+    hover:-translate-y-0.5
+    hover:border-orange-500/40
+    hover:bg-white/[0.08]
+    hover:text-orange-400
+    hover:shadow-[0_12px_35px_rgba(249,115,22,0.12)]
+  "
+>
+  <span
+    className="
+      pointer-events-none absolute inset-x-8 top-0 h-px
+      bg-gradient-to-r
+      from-transparent
+      via-white/40
+      to-transparent
+    "
+  />
+  
+
+  <span className="relative transition-transform duration-300 group-hover:-translate-x-1">
+    ←
+  </span>
+
+  <span className="relative">
+    CONTINUE SHOPPING
+  </span>
+</Link>
+</div>
+
           </aside>
         </div>
       </div>
