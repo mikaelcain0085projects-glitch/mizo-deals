@@ -29,7 +29,7 @@ export default function AdminDashboardLink() {
           aria-label="Loading"
         />
       ) : (
-        "<- ADMIN DASHBOARD"
+        "ADMIN DASHBOARD"
       )}
     </Link>
   );
