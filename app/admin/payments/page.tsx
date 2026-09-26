@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createClient } from "../../../lib/supabase-server";
+import AdminDashboardLink from "@/components/AdminDashboardLink";
 
 type PaymentOrder = {
   id: string;
@@ -174,12 +175,7 @@ export default async function AdminPaymentsPage() {
             </p>
           </div>
 
-          <Link
-            href="/admin"
-            className="inline-flex w-fit rounded-full border border-white/20 px-5 py-2.5 text-xs font-semibold tracking-[0.15em] text-white/70 transition hover:bg-white hover:text-black"
-          >
-            ← ADMIN DASHBOARD
-          </Link>
+          <AdminDashboardLink />
         </div>
 
         <div className="mt-10 rounded-2xl border border-yellow-400/20 bg-yellow-400/5 p-5">
@@ -317,7 +313,7 @@ export default async function AdminPaymentsPage() {
         <div className="mt-10">
           <Link
             href="/admin/orders"
-            className="inline-flex rounded-full border border-white/20 px-6 py-3 text-xs font-semibold tracking-[0.15em] text-white/60 transition hover:bg-white hover:text-black"
+            className="inline-flex rounded-full border border-white/20 px-6 py-3 text-xs font-semibold tracking-[0.15em] text-green-600 transition hover:bg-white hover:text-black"
           >
             VIEW ALL ORDERS →
           </Link>
