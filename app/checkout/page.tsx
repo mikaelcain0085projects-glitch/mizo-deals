@@ -678,7 +678,7 @@ router.push(`/upi-payment?order=${orderId}`);
     });
   }}
   disabled={backToCartLoading}
-  className="mt-4 block w-full text-center text-sm text-white/50 transition hover:text-white disabled:cursor-not-allowed disabled:opacity-70"
+  className="mt-4 block w-full text-center text-sm text-orange-600 transition hover:text-white disabled:cursor-not-allowed disabled:opacity-70"
 >
   {backToCartLoading ? (
     <span className="inline-flex items-center justify-center gap-2">

@@ -102,11 +102,43 @@ export default async function ProductPage({
 
         {/* BACK TO SHOP */}
         <Link
-          href="/shop"
-          className="inline-flex items-center text-sm tracking-widest text-orange-500 transition hover:text-white"
-        >
-          ← BACK TO SHOP
-        </Link>
+  href="/shop"
+  className="
+    group relative inline-flex items-center gap-3
+    overflow-hidden
+    rounded-full
+    border border-white/15
+    bg-white/[0.045]
+    px-5 py-3
+    text-xs font-semibold uppercase
+    tracking-[0.16em]
+    text-white/70
+    shadow-[0_8px_30px_rgba(0,0,0,0.25)]
+    backdrop-blur-xl
+    transition-all duration-300
+    hover:-translate-y-0.5
+    hover:border-orange-500/40
+    hover:bg-white/[0.08]
+    hover:text-orange-400
+    hover:shadow-[0_12px_35px_rgba(249,115,22,0.12)]
+  "
+>
+  <span
+    className="
+      pointer-events-none absolute inset-x-8 top-0 h-px
+      bg-gradient-to-r
+      from-transparent
+      via-white/40
+      to-transparent
+    "
+  />
+  <span className="relative transition-transform duration-300 group-hover:-translate-x-1">
+    ←
+  </span>
+  <span className="relative">
+    BACK TO SHOP
+  </span>
+</Link>
 
         {/* PRODUCT */}
         <div className="mt-10 grid gap-12 lg:grid-cols-2">
